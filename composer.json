@@ -11,7 +11,7 @@
         }
     },
     "scripts": {
-        "cs:check": "composer cs-fix -- --dry-run",
+        "cs:check": "composer cs:fix -- --dry-run",
         "cs:fix": "php-cs-fixer fix --diff --diff-format=udiff --verbose --ansi --allow-risky=yes"
     },
     "require-dev": {
