@@ -1,2 +1,5 @@
 grumphp:
     tasks: { phpcs: null }
+    fixer:
+        enabled: false
+        fix_by_default: false
