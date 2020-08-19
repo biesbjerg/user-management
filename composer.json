@@ -2,7 +2,7 @@
     "name": "biesbjerg/user-management",
     "description": "User management ",
     "require": {
-        "php": ">=7.3",
+        "php": ">=7.4",
         "slim/slim": "4.*",
         "slim/psr7": "^1.1",
         "slim/http": "^1.0",
