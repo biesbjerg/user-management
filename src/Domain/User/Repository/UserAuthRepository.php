@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace App\Domain\User\Repository;
 
-use Cake\Datasource\ConnectionInterface as Connection;
+use Cake\Database\Connection;
 
 class UserAuthRepository
 {
@@ -32,5 +32,17 @@ class UserAuthRepository
         $row = $query->execute()->fetch('assoc');
 
         return $row ?: [];
+    }
+
+    public function touchLastLogin(int $userId): bool
+    {
+        $query = $this->connection->update(
+            'users',
+            ['last_login' => new DateTime('now')],
+            ['id' => $userId],
+            ['last_login' => 'datetime']
+        );
+
+        return $query->execute();
     }
 }

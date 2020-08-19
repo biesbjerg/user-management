@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace App\Domain\User\Repository;
 
-use Cake\Datasource\ConnectionInterface as Connection;
+use Cake\Database\Connection;
 
 class UserReaderRepository
 {

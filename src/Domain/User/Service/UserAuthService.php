@@ -32,6 +32,11 @@ class UserAuthService
         return $row;
     }
 
+    public function updateLastLogin(int $userId): bool
+    {
+        return (bool) $this->repository->touchLastLogin($userId);
+    }
+
     public function isAuthenticated(): bool
     {
         return (bool) $this->getUser();

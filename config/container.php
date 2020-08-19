@@ -9,7 +9,6 @@ use Slim\Views\Twig;
 use Slim\Views\TwigMiddleware;
 use Psr\Container\ContainerInterface;
 use Cake\Database\Connection;
-use Cake\Datasource\ConnectionInterface;
 use Odan\Session\FlashInterface;
 use Odan\Session\SessionInterface;
 use Odan\Session\PhpSession;
@@ -33,7 +32,7 @@ return [
         return $app->getRouteCollector()->getRouteParser();
     },
 
-    ConnectionInterface::class => function (ContainerInterface $container): ConnectionInterface {
+    Connection::class => function (ContainerInterface $container): Connection {
         $settings = $container->get('settings');
         return new Connection($settings['db']);
     },
