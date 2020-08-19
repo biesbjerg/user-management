@@ -3,7 +3,8 @@ declare(strict_types=1);
 
 namespace App\Middleware;
 
-use Odan\Session\SessionInterface;
+use App\Domain\User\Service\UserAuthService;
+use Odan\Session\FlashInterface as Flash;
 use Slim\Psr7\Factory\ResponseFactory;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -15,38 +16,35 @@ class AuthMiddleware implements MiddlewareInterface
 {
     private ResponseFactory $responseFactory;
 
-    private SessionInterface $session;
+    private UserAuthService $userAuthService;
+
+    private Flash $flash;
 
     private RouteParser $router;
 
-    private array $config = [
-        'flashKey' => 'auth',
-        'loginUrl' => 'auth.login',
-        'loginSuccessMessage' => 'Please log in to access the requested resource'
-    ];
-
-    public function __construct(ResponseFactory $responseFactory, SessionInterface $session, RouteParser $router)
-    {
+    public function __construct(
+        ResponseFactory $responseFactory,
+        UserAuthService $userAuthService,
+        Flash $flash,
+        RouteParser $router
+    ) {
         $this->responseFactory = $responseFactory;
-        $this->session = $session;
+        $this->userAuthService = $userAuthService;
+        $this->flash = $flash;
         $this->router = $router;
     }
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
-        $user = $this->session->get('Auth');
-        if (!$user) {
-            if ($this->config['loginSuccessMessage']) {
-                $this->session->getFlash()->set($this->config['flashKey'], [$this->config['loginSuccessMessage']]);
-            }
-
-            $redirectUrl = $this->router->urlFor($this->config['loginUrl']);
-            return $this->responseFactory
-                ->createResponse()
-                ->withHeader('Location', $redirectUrl)
-                ->withStatus(302);
+        if ($this->userAuthService->isAuthenticated()) {
+            return $handler->handle($request);
         }
 
-        return $handler->handle($request);
+        $this->flash->set('auth', ['Please log in to access the requested resource']);
+
+        return $this->responseFactory
+            ->createResponse()
+            ->withHeader('Location', $this->router->urlFor('auth.login'))
+            ->withStatus(302);
     }
 }
