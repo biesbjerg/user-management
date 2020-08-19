@@ -18,21 +18,16 @@ class UserAuthService
         $this->session = $session;
     }
 
-    public function authenticate(string $username, string $password): ?array // TODO: DTO
+    public function authenticate(string $username, string $password): ?array
     {
         $row = $this->repository->findUserByUsername($username);
         if (!$row) {
             return null;
         }
 
-        if ($password !== $row['password']) {
+        if (!password_verify($password, $row['password'])) {
             return null;
         }
-        /*if (!password_verify($password, $row['password'])) {
-            return null;
-        }*/
-
-        // TODO Map to DTO?
 
         return $row;
     }
