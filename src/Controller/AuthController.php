@@ -39,7 +39,12 @@ class AuthController extends Controller
             if ($user) {
                 $this->userAuthService->updateLastLogin((int) $user['id']);
                 $this->userAuthService->setUser($user);
-                $this->flash->add('auth', sprintf('Welcome, %s', $user['name']));
+
+                $this->flash->add('auth', sprintf(
+                    'Welcome, %s! Last login: %s.',
+                    $user['name'],
+                    $user['last_login'] ?? 'never'
+                ));
                 return $response->withRedirect($this->router->urlFor('users.index'));
             } else {
                 $this->flash->add('auth', 'Invalid username or password');

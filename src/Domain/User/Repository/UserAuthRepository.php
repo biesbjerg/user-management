@@ -23,7 +23,8 @@ class UserAuthRepository
                 'id',
                 'username',
                 'password',
-                'name'
+                'name',
+                'last_login'
             ])
             ->where([
                 'username' => $username,
