@@ -4,15 +4,20 @@ declare(strict_types=1);
 use Slim\App;
 use DI\ContainerBuilder;
 
-require_once __DIR__ . '/../vendor/autoload.php';
+require __DIR__ . '/../vendor/autoload.php';
 
 $settings = require __DIR__ . '/settings.php';
-error_reporting(E_ALL); // TODO?
-if (function_exists('ini_set')) {
-    ini_set('display_errors', $settings['debug'] ? '1' : '0');
+
+error_reporting(0);
+ini_set('display_errors', '0');
+if ($settings['debug']) {
+    error_reporting(E_ALL);
+    ini_set('display_errors', '1');
+
+    $settings['twig']['options']['cache_path'] = false;
 }
 
-date_default_timezone_set($settings['default_timezone']);
+date_default_timezone_set($settings['timezone']);
 
 $containerBuilder = new ContainerBuilder();
 $containerBuilder->addDefinitions(__DIR__ . '/container.php');
