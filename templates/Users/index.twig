@@ -1,0 +1,7 @@
+{% for message in flash.get('default') %}
+    <div class="alert alert-default">
+        {{ message }}
+    </div>
+{% endfor %}
+
+{{ users|json_encode }}

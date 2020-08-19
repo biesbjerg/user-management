@@ -1,0 +1,21 @@
+{% for message in flash.get('auth') %}
+    <div class="alert alert-default">
+        {{ message }}
+    </div>
+{% endfor %}
+
+{% for message in flash.get('default') %}
+    <div class="alert alert-default">
+        {{ message }}
+    </div>
+{% endfor %}
+
+<div class="container">
+    <form method="POST">
+        <h1 class="h3 mb-3 font-weight-normal">{{ 'Log in' }}</h1>
+        <input type="hidden" name="_METHOD" value="POST">
+        <input type="text" name="username" {% if username is not empty %}value="{{ username }}"{% endif %}class="form-control" placeholder="{{ 'Username' }}" required autofocus>
+        <input type="password" name="password" class="form-control" placeholder="{{ 'Password' }}" required>
+        <button class="btn btn-lg btn-primary btn-block" type="submit">{{ 'Login' }}</button>
+    </form>
+</div>
