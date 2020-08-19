@@ -10,6 +10,7 @@ use Slim\Views\Twig;
 use Slim\Views\TwigMiddleware;
 use Psr\Container\ContainerInterface;
 use Cake\Database\Connection;
+use Odan\Session\FlashInterface;
 use Odan\Session\SessionInterface;
 use Odan\Session\PhpSession;
 use Odan\Session\Middleware\SessionMiddleware;
@@ -45,6 +46,11 @@ return [
 
     SessionMiddleware::class => function (ContainerInterface $container): SessionMiddleware {
         return new SessionMiddleware($container->get(SessionInterface::class));
+    },
+
+    FlashInterface::class => function (ContainerInterface $container): FlashInterface {
+        $session = $container->get(SessionInterface::class);
+        return $session->getFlash();
     },
 
     ErrorMiddleware::class => function (ContainerInterface $container): ErrorMiddleware {
