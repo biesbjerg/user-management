@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace App\Domain\User\Repository;
 
-use Cake\Database\Connection;
+use Cake\Datasource\ConnectionInterface as Connection;
 
 class UserAuthRepository
 {
@@ -21,7 +21,8 @@ class UserAuthRepository
             ->select([
                 'id',
                 'username',
-                'password'
+                'password',
+                'name'
             ])
             ->where([
                 'username' => $username,

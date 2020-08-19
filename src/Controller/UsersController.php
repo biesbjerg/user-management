@@ -4,16 +4,12 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Domain\User\Service\UserReaderService;
-use App\Domain\User\Service\UserService;
-use DomainException;
 use Psr\Http\Message\ResponseInterface;
 
-use Slim\Routing\RouteParser;
+use Slim\Interfaces\RouteParserInterface as RouteParser;
 use Slim\Http\Response;
 use Slim\Http\ServerRequest as Request;
 use Slim\Views\Twig;
-
-use Exception;
 
 class UsersController extends Controller
 {

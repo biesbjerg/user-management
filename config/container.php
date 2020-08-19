@@ -5,15 +5,16 @@ use Slim\App;
 use Slim\Factory\AppFactory;
 use Slim\Middleware\ErrorMiddleware;
 use Slim\Handlers\Strategies\RequestResponseArgs;
-use Slim\Routing\RouteParser;
 use Slim\Views\Twig;
 use Slim\Views\TwigMiddleware;
 use Psr\Container\ContainerInterface;
 use Cake\Database\Connection;
+use Cake\Datasource\ConnectionInterface;
 use Odan\Session\FlashInterface;
 use Odan\Session\SessionInterface;
 use Odan\Session\PhpSession;
 use Odan\Session\Middleware\SessionMiddleware;
+use Slim\Interfaces\RouteParserInterface;
 
 return [
     'settings' => function (): array {
@@ -27,12 +28,12 @@ return [
         return $app;
     },
 
-    RouteParser::class => function (ContainerInterface $container): RouteParser {
+    RouteParserInterface::class => function (ContainerInterface $container): RouteParserInterface {
         $app = $container->get(App::class);
         return $app->getRouteCollector()->getRouteParser();
     },
 
-    Connection::class => function (ContainerInterface $container): Connection {
+    ConnectionInterface::class => function (ContainerInterface $container): ConnectionInterface {
         $settings = $container->get('settings');
         return new Connection($settings['db']);
     },

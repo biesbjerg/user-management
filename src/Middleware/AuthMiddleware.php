@@ -10,7 +10,7 @@ use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use Slim\Routing\RouteParser;
+use Slim\Interfaces\RouteParserInterface as RouteParser;
 
 class AuthMiddleware implements MiddlewareInterface
 {

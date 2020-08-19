@@ -6,8 +6,7 @@ namespace App\Controller;
 use App\Domain\User\Service\UserAuthService;
 use Odan\Session\FlashInterface as Flash;
 use Psr\Http\Message\ResponseInterface;
-
-use Slim\Routing\RouteParser;
+use Slim\Interfaces\RouteParserInterface as RouteParser;
 use Slim\Http\Response;
 use Slim\Http\ServerRequest as Request;
 use Slim\Views\Twig;
