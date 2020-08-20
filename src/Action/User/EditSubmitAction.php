@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Action\User;
 
 use App\Action\Action;
+use App\Domain\User\Service\UserUpdaterService;
 use Psr\Http\Message\ResponseInterface;
 use Slim\Http\Response;
 use Slim\Http\ServerRequest as Request;
@@ -13,26 +14,37 @@ use Odan\Session\FlashInterface as Flash;
 
 class EditSubmitAction extends Action
 {
+    private UserUpdaterService $userUpdaterService;
+
     private RouteParser $router;
 
     private Twig $view;
 
     private Flash $flash;
 
-    public function __construct(RouteParser $router, Twig $view, Flash $flash)
-    {
+    public function __construct(
+        UserUpdaterService $userUpdaterService,
+        RouteParser $router,
+        Twig $view,
+        Flash $flash
+    ) {
+        $this->userUpdaterService = $userUpdaterService;
         $this->router = $router;
         $this->view = $view;
         $this->flash = $flash;
     }
 
-    public function __invoke(Request $request, Response $response): ResponseInterface
+    public function __invoke(Request $request, Response $response, $id): ResponseInterface
     {
         $data = (array) $request->getParsedBody();
 
-        // TODO: Validate & save
-        $validates = true;
-        if ($validates) {
+        // Don't update password if left blank
+        if (empty($data['password'])) {
+            unset($data['password']);
+        }
+
+        // TODO: Exception flow
+        if ($this->userUpdaterService->save($id, $data)) {
             $this->flash->add('success', 'User updated successfully');
             return $response->withRedirect($this->router->urlFor('users.index'));
         }
