@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Domain\User\Service\UserAuthService;
+use App\Domain\User\Service\UserSessionService;
 use Odan\Session\FlashInterface as Flash;
 use Psr\Http\Message\ResponseInterface;
 use Slim\Interfaces\RouteParserInterface as RouteParser;
@@ -21,12 +22,18 @@ class AuthController extends Controller
 
     private Flash $flash;
 
-    public function __construct(UserAuthService $userAuthService, RouteParser $router, Twig $view, Flash $flash)
-    {
+    public function __construct(
+        UserAuthService $userAuthService,
+        UserSessionService $userSessionService,
+        RouteParser $router,
+        Twig $view,
+        Flash $flash
+    ) {
+        $this->userAuthService = $userAuthService;
+        $this->userSessionService = $userSessionService;
         $this->router = $router;
         $this->view = $view;
         $this->flash = $flash;
-        $this->userAuthService = $userAuthService;
     }
 
     public function login(Request $request, Response $response): ResponseInterface
@@ -38,7 +45,7 @@ class AuthController extends Controller
             $user = $this->userAuthService->authenticate($username, $password);
             if ($user) {
                 $this->userAuthService->updateLastLogin((int) $user['id']);
-                $this->userAuthService->setUser($user);
+                $this->userSessionService->set($user);
 
                 $this->flash->add('auth', sprintf(
                     'Welcome, %s! Last login: %s.',
@@ -58,7 +65,7 @@ class AuthController extends Controller
 
     public function logout(Request $request, Response $response): ResponseInterface
     {
-        $this->userAuthService->clearUser();
+        $this->userSessionService->clear();
         $this->flash->add('default', 'You have been logged out');
 
         return $response->withRedirect($this->router->urlFor('auth.login'));
