@@ -31,6 +31,6 @@ class UserAuthService
 
     public function updateLastLogin(int $userId): bool
     {
-        return (bool) $this->repository->touchLastLogin($userId);
+        return $this->repository->touchLastLogin($userId);
     }
 }
