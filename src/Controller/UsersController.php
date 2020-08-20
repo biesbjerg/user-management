@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Domain\User\Service\UserReaderService;
+use Odan\Session\FlashInterface as Flash;
 use Psr\Http\Message\ResponseInterface;
 
 use Slim\Interfaces\RouteParserInterface as RouteParser;
@@ -13,31 +14,39 @@ use Slim\Views\Twig;
 
 class UsersController extends Controller
 {
+    private UserReaderService $userReaderService;
+
     private Twig $view;
 
-    private UserReaderService $userService;
+    private RouteParser $router;
 
-    public function __construct(RouteParser $router, Twig $view, UserReaderService $userService)
-    {
+    private Flash $flash;
+
+    public function __construct(
+        UserReaderService $userReaderService,
+        RouteParser $router,
+        Twig $view,
+        Flash $flash
+    ) {
+        $this->userReaderService = $userReaderService;
         $this->router = $router;
         $this->view = $view;
-        $this->userService = $userService;
+        $this->flash = $flash;
     }
 
     public function index(Request $request, Response $response): ResponseInterface
     {
-        $users = $this->userService->getAll();
+        $users = $this->userReaderService->getAll();
 
         return $this->view->render($response, 'Users/index.twig', compact('users'));
     }
 
     public function view(Request $request, Response $response, $id): ResponseInterface
     {
-        $user = $this->userService->get($id);
+        $user = $this->userReaderService->get($id);
         if (!$user) {
-            // TODO: Handle better
-            $response->getBody()->write(sprintf('User not found: %d', $id));
-            return $response->withStatus(404);
+            $this->flash->add('error', 'User not found');
+            return $response->withRedirect($this->router->urlFor('users.index'));
         }
 
         return $this->view->render($response, 'Users/view.twig', compact('user'));
@@ -46,36 +55,37 @@ class UsersController extends Controller
     public function add(Request $request, Response $response): ResponseInterface
     {
         if ($request->isPost()) {
+            $data = (array) $request->getParsedBody();
             // TODO: Validate & save
-            $validates = true;
+            $validates = false;
             if ($validates) {
-                // TODO: Set flash
+                $this->flash->add('success', 'User created successfully');
                 return $response->withRedirect($this->router->urlFor('users.index'));
             }
+            $this->flash->add('error', 'Unable to create user');
+        } else {
+            $data = [];
         }
 
-        return $this->view->render($response, 'Users/add.twig', [
-            // Entity or POST-data
-        ]);
+        return $this->view->render($response, 'Users/add.twig', $data);
     }
 
     public function edit(Request $request, Response $response, $id): ResponseInterface
     {
-        if ($request->isPost()) {
+        if ($request->isPut()) {
+            $data = (array) $request->getParsedBody();
             // TODO: Validate & save
             $validates = true;
             if ($validates) {
-                // TODO: Set flash
+                $this->flash->add('success', 'User updated successfully');
                 return $response->withRedirect($this->router->urlFor('users.index'));
             }
+            $this->flash->add('error', 'Unable to update user');
         } else {
-            // TODO: Get user with $id
+            $data = $this->userReaderService->get($id);
         }
 
-        return $this->view->render($response, 'Users/edit.twig', [
-            // Entity or POST-data
-            'user' => $id
-        ]);
+        return $this->view->render($response, 'Users/edit.twig', $data);
     }
 
     public function delete(Request $request, Response $response, $id): ResponseInterface
@@ -83,7 +93,9 @@ class UsersController extends Controller
         // TODO: Delete
         $deleted = true;
         if ($deleted) {
-            // TODO: Set flash
+            $this->flash->add('success', 'User deleted successfully');
+        } else {
+            $this->flash->add('error', 'Unable to delete user');
         }
 
         return $response->withRedirect($this->router->urlFor('users.index'));
