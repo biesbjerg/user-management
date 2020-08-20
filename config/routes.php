@@ -1,8 +1,6 @@
 <?php
 declare(strict_types=1);
 
-use App\Controller\AuthController;
-use App\Controller\UsersController;
 use App\Middleware\AuthMiddleware;
 use Slim\App;
 use Slim\Interfaces\RouteCollectorProxyInterface;
@@ -10,16 +8,23 @@ use Slim\Interfaces\RouteCollectorProxyInterface;
 return function (App $app) {
     $app->redirect('/', '/users')->setName('home');
 
-    $app->map(['GET', 'POST'], '/login', AuthController::class . ':login')->setName('auth.login');
-    $app->get('/logout', AuthController::class . ':logout')->setName('auth.logout');
+    $app->get('/login', \App\Action\Auth\LoginAction::class)->setName('auth.login');
+    $app->post('/login', \App\Action\Auth\LoginSubmitAction::class);
+    $app->get('/logout', \App\Action\Auth\LogoutAction::class)->setName('auth.logout');
 
     $app->group('/users', function (RouteCollectorProxyInterface $group) {
-        $group->get('', UsersController::class . ':index')->setName('users.index');
-        $group->map(['GET', 'POST'], '/add', UsersController::class . ':add')->setName('users.add');
+        $group->get('', \App\Action\User\IndexAction::class)->setName('users.index');
+
+        $group->get('/add', \App\Action\User\AddAction::class)->setName('users.add');
+        $group->post('/add', \App\Action\User\AddSubmitAction::class);
+
         $group->group('/{id:[0-9]+}', function (RouteCollectorProxyInterface $group) {
-            $group->get('', UsersController::class . ':view')->setName('users.view');
-            $group->map(['GET', 'PUT'], '/edit', UsersController::class . ':edit')->setName('users.edit');
-            $group->delete('/delete', UsersController::class . ':delete')->setName('users.delete');
+            $group->get('', \App\Action\User\ViewAction::class)->setName('users.view');
+
+            $group->get('/edit', \App\Action\User\EditAction::class)->setName('users.edit');
+            $group->put('/edit', \App\Action\User\EditSubmitAction::class);
+
+            $group->delete('/delete', \App\Action\User\DeleteAction::class)->setName('users.delete');
         });
     })->add(AuthMiddleware::class);
 };
