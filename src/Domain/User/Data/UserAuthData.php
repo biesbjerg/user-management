@@ -13,7 +13,7 @@ class UserAuthData
 
     public string $name;
 
-    public DateTime $lastLogin;
+    public ?DateTime $lastLogin;
 
     public static function fromArray(array $data): self
     {
@@ -22,7 +22,7 @@ class UserAuthData
         $user->id = (int) $data['id'];
         $user->name = (string) $data['name'];
         $user->username = (string) $data['username'];
-        $user->lastLogin = new DateTime($data['last_login']);
+        $user->lastLogin = $data['last_login'] ? new DateTime($data['last_login']) : null;
 
         return $user;
     }

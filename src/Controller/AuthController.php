@@ -48,9 +48,9 @@ class AuthController extends Controller
                 $this->userSessionService->set($user);
 
                 $this->flash->add('auth', sprintf(
-                    'Welcome, %s! Last login: %s.',
+                    'Welcome, %s! Last login: %s',
                     $user->name,
-                    $user->lastLogin->format('l, j. F Y H:i') ?? 'never'
+                    $user->lastLogin ? $user->lastLogin->format('l, j. F Y H:i') : 'never'
                 ));
                 return $response->withRedirect($this->router->urlFor('users.index'));
             } else {
