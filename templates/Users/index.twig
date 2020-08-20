@@ -16,7 +16,7 @@
             <th scope="col">Username</th>
             <th scope="col">Name</th>
             <th scope="col">Last Login</th>
-            <th scope="col">Actions</th>
+            <th scope="col" class="text-right">Actions</th>
         </tr>
     </thead>
     <tbody>
@@ -25,11 +25,14 @@
             <th scope="row">{{ user.id }}</th>
             <td>{{ user.username }}</td>
             <td>{{ user.name }}</td>
-            <td>{{ user.last_login }}</td>
-            <td>
-                <a href="{{ url_for('users.view', { id: user.id }) }}">View</a> |
-                <a href="{{ url_for('users.edit', { id: user.id }) }}">Edit</a> |
-                <a href="{{ url_for('users.delete', { id: user.id }) }}">Delete</a>
+            <td>{{ user.last_login|default('Never') }}</td>
+            <td class="text-right">
+                <a class="btn btn-sm btn-primary" href="{{ url_for('users.view', { id: user.id }) }}">View</a>
+                <a class="btn btn-sm btn-secondary" href="{{ url_for('users.edit', { id: user.id }) }}">Edit</a>
+                <form method="POST" action="{{ url_for('users.delete', { id: user.id }) }}" class="d-inline">
+                    <input type="hidden" name="_METHOD" value="DELETE">
+                    <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                </form>
             </td>
         </tr>
         {% endfor %}
