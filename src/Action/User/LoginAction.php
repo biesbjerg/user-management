@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Action\USer;
+namespace App\Action\User;
 
 use App\Action\Action;
 use Psr\Http\Message\ResponseInterface;
