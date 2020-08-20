@@ -5,7 +5,7 @@ namespace App\Domain\User\Data;
 
 use DateTime;
 
-class UserAuthData
+class UserSessionData
 {
     public int $id;
 

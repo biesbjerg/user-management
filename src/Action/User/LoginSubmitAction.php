@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Action\Auth;
+namespace App\Action\User;
 
 use App\Action\Action;
 use App\Domain\User\Service\UserAuthService;
@@ -59,6 +59,6 @@ class LoginSubmitAction extends Action
             $this->flash->add('error', 'Invalid username or password');
         }
 
-        return $this->view->render($response, 'Auth/login.twig', compact('username'));
+        return $this->view->render($response, 'users/login.twig', compact('username'));
     }
 }

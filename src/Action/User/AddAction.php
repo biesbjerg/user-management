@@ -20,6 +20,6 @@ class AddAction extends Action
 
     public function __invoke(Request $request, Response $response): ResponseInterface
     {
-        return $this->view->render($response, 'Users/add.twig');
+        return $this->view->render($response, 'users/add.twig');
     }
 }

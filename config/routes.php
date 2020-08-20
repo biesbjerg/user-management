@@ -8,9 +8,9 @@ use Slim\Interfaces\RouteCollectorProxyInterface;
 return function (App $app) {
     $app->redirect('/', '/users')->setName('home');
 
-    $app->get('/login', \App\Action\Auth\LoginAction::class)->setName('auth.login');
-    $app->post('/login', \App\Action\Auth\LoginSubmitAction::class);
-    $app->get('/logout', \App\Action\Auth\LogoutAction::class)->setName('auth.logout');
+    $app->get('/login', \App\Action\User\LoginAction::class)->setName('users.login');
+    $app->post('/login', \App\Action\User\LoginSubmitAction::class);
+    $app->get('/logout', \App\Action\User\LogoutAction::class)->setName('users.logout');
 
     $app->group('/users', function (RouteCollectorProxyInterface $group) {
         $group->get('', \App\Action\User\IndexAction::class)->setName('users.index');

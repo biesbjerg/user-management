@@ -34,6 +34,6 @@ class ViewAction extends Action
             return $response->withRedirect($this->router->urlFor('users.index'));
         }
 
-        return $this->view->render($response, 'Users/view.twig', compact('user'));
+        return $this->view->render($response, 'users/view.twig', compact('user'));
     }
 }

@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Action\Auth;
+namespace App\Action\USer;
 
 use App\Action\Action;
 use Psr\Http\Message\ResponseInterface;
@@ -20,6 +20,6 @@ class LoginAction extends Action
 
     public function __invoke(Request $request, Response $response): ResponseInterface
     {
-        return $this->view->render($response, 'Auth/login.twig');
+        return $this->view->render($response, 'users/login.twig');
     }
 }

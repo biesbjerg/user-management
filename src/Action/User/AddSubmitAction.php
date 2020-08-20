@@ -38,6 +38,6 @@ class AddSubmitAction extends Action
         }
         $this->flash->add('error', 'Unable to add user');
 
-        return $this->view->render($response, 'Users/add.twig', $data);
+        return $this->view->render($response, 'users/add.twig', $data);
     }
 }

@@ -44,7 +44,7 @@ class AuthMiddleware implements MiddlewareInterface
 
         return $this->responseFactory
             ->createResponse()
-            ->withHeader('Location', $this->router->urlFor('auth.login'))
+            ->withHeader('Location', $this->router->urlFor('users.login'))
             ->withStatus(302);
     }
 }

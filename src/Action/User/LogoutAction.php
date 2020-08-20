@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Action\Auth;
+namespace App\Action\User;
 
 use App\Action\Action;
 use App\Domain\User\Service\UserSessionService;
@@ -31,6 +31,6 @@ class LogoutAction extends Action
         $this->userSessionService->clear();
         $this->flash->add('info', 'You have been logged out');
 
-        return $response->withRedirect($this->router->urlFor('auth.login'));
+        return $response->withRedirect($this->router->urlFor('users.login'));
     }
 }

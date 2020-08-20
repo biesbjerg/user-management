@@ -26,6 +26,6 @@ class EditAction extends Action
     {
         $data = $this->userReaderService->get($id);
 
-        return $this->view->render($response, 'Users/edit.twig', $data);
+        return $this->view->render($response, 'users/edit.twig', $data);
     }
 }

@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace App\Domain\User\Service;
 
-use App\Domain\User\Data\UserAuthData;
+use App\Domain\User\Data\UserSessionData;
 use App\Domain\User\Repository\UserAuthRepository;
 
 class UserAuthService
@@ -15,7 +15,7 @@ class UserAuthService
         $this->repository = $repository;
     }
 
-    public function authenticate(string $username, string $password): ?UserAuthData
+    public function authenticate(string $username, string $password): ?UserSessionData
     {
         $row = $this->repository->findUserByUsername($username);
         if (!$row) {
@@ -26,7 +26,7 @@ class UserAuthService
             return null;
         }
 
-        return UserAuthData::fromArray($row);
+        return UserSessionData::fromArray($row);
     }
 
     public function updateLastLogin(int $userId): bool
