@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Domain\User\Service;
 
+use App\Domain\User\Data\UserAuthData;
 use Odan\Session\SessionInterface as Session;
 
 class UserSessionService
@@ -14,12 +15,12 @@ class UserSessionService
         $this->session = $session;
     }
 
-    public function set(array $data): void
+    public function set(UserAuthData $user): void
     {
-        $this->session->set('User', $data);
+        $this->session->set('User', $user);
     }
 
-    public function get(): ?array
+    public function get(): ?UserAuthData
     {
         return $this->session->get('User');
     }

@@ -18,7 +18,14 @@ class UserReaderRepository
     {
         $query = $this->connection->newQuery()
             ->from('users')
-            ->select('*');
+            ->select([
+                'id',
+                'username',
+                'name',
+                'is_enabled',
+                'last_login',
+                'created'
+            ]);
 
         $rows = $query->execute()->fetchAll('assoc');
 
@@ -29,32 +36,18 @@ class UserReaderRepository
     {
         $query = $this->connection->newQuery()
             ->from('users')
-            ->select('*')
+            ->select([
+                'id',
+                'username',
+                'name',
+                'is_enabled',
+                'last_login',
+                'created'
+            ])
             ->where(['id' => $id]);
 
         $row = $query->execute()->fetch('assoc');
 
         return $row ?: [];
     }
-
-    /*public function create(array $data): bool
-    {
-        return $this->connection
-            ->insert('users', $data)
-            ->execute();
-    }
-
-    public function update($id, array $data): bool
-    {
-        return $this->connection
-            ->update('users', $data, ['id' => $id])
-            ->execute();
-    }
-
-    public function delete($id): bool
-    {
-        return $this->connection
-            ->delete('users', ['id' => $id])
-            ->execute();
-    }*/
 }
