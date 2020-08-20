@@ -14,12 +14,12 @@ class UserReaderService
         $this->repository = $repository;
     }
 
-    public function getAllUsers(): array
+    public function getAll(): array
     {
         return $this->repository->findAll();
     }
 
-    public function getUser($id): array
+    public function get($id): array
     {
         return $this->repository->findById($id);
     }

@@ -26,14 +26,14 @@ class UsersController extends Controller
 
     public function index(Request $request, Response $response): ResponseInterface
     {
-        $users = $this->userService->getAllUsers();
+        $users = $this->userService->getAll();
 
         return $this->view->render($response, 'Users/index.twig', compact('users'));
     }
 
     public function view(Request $request, Response $response, $id): ResponseInterface
     {
-        $user = $this->userService->getUser($id);
+        $user = $this->userService->get($id);
         if (!$user) {
             // TODO: Handle better
             $response->getBody()->write(sprintf('User not found: %d', $id));
