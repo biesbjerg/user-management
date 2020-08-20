@@ -74,6 +74,7 @@ class UsersController extends Controller
 
         return $this->view->render($response, 'Users/edit.twig', [
             // Entity or POST-data
+            'user' => $id
         ]);
     }
 

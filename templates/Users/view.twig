@@ -1,1 +1,8 @@
-{{ user|json_encode }}
+{% extends 'layouts/default.twig' %}
+
+{% block title %}View User{% endblock %}
+
+{% block content %}
+<h1>View User</h1>
+<pre>{{ user|json_encode(constant('JSON_PRETTY_PRINT')) }}</pre>
+{% endblock %}

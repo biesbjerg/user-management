@@ -1,13 +1,38 @@
-{% for message in flash.get('auth') %}
-    <div class="alert alert-default">
-        {{ message }}
-    </div>
-{% endfor %}
+{% extends 'layouts/default.twig' %}
 
-{% for message in flash.get('default') %}
-    <div class="alert alert-default">
-        {{ message }}
-    </div>
-{% endfor %}
+{% block title %}Users{% endblock %}
 
-{{ users|json_encode }}
+{% block content %}
+<h1>Users</h1>
+
+<ul class="list-unstyled mt-4 pb-2 border-bottom">
+    <li><a href="{{ url_for('users.add') }}" class="btn btn-primary">Add User</a></li>
+</ul>
+
+<table class="table">
+    <thead class="thead-light">
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Username</th>
+            <th scope="col">Name</th>
+            <th scope="col">Last Login</th>
+            <th scope="col">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for user in users %}
+        <tr>
+            <th scope="row">{{ user.id }}</th>
+            <td>{{ user.username }}</td>
+            <td>{{ user.name }}</td>
+            <td>{{ user.last_login }}</td>
+            <td>
+                <a href="{{ url_for('users.view', { id: user.id }) }}">View</a> |
+                <a href="{{ url_for('users.edit', { id: user.id }) }}">Edit</a> |
+                <a href="{{ url_for('users.delete', { id: user.id }) }}">Delete</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
