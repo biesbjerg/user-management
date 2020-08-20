@@ -29,7 +29,7 @@
             <td class="text-right">
                 <a class="btn btn-sm btn-primary" href="{{ url_for('users.view', { id: user.id }) }}">View</a>
                 <a class="btn btn-sm btn-secondary" href="{{ url_for('users.edit', { id: user.id }) }}">Edit</a>
-                <form method="POST" action="{{ url_for('users.delete', { id: user.id }) }}" class="d-inline">
+                <form method="POST" action="{{ url_for('users.delete', { id: user.id }) }}" class="d-inline" onclick="return confirm('Are you sure?');">
                     <input type="hidden" name="_METHOD" value="DELETE">
                     <button type="submit" class="btn btn-sm btn-danger">Delete</button>
                 </form>
