@@ -16,8 +16,6 @@ class UserDeleterRepository
 
     public function delete($id): bool
     {
-        $query = $this->connection->delete('users', ['id' => $id]);
-
-        return $query->execute();
+        return (bool) $this->connection->delete('users', ['id' => $id]);
     }
 }

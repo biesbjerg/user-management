@@ -38,13 +38,11 @@ class UserAuthRepository
 
     public function touchLastLogin(int $userId): bool
     {
-        $query = $this->connection->update(
+        return (bool) $this->connection->update(
             'users',
             ['last_login' => new DateTime('now')],
             ['id' => $userId],
             ['last_login' => 'datetime']
         );
-
-        return $query->execute();
     }
 }
