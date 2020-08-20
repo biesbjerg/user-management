@@ -40,7 +40,7 @@ class AuthMiddleware implements MiddlewareInterface
             return $handler->handle($request);
         }
 
-        $this->flash->set('auth', ['Please log in to access the requested resource']);
+        $this->flash->add('error', 'Please log in to access the requested resource');
 
         return $this->responseFactory
             ->createResponse()

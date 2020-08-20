@@ -47,14 +47,14 @@ class AuthController extends Controller
                 $this->userAuthService->updateLastLogin($user->id);
                 $this->userSessionService->set($user);
 
-                $this->flash->add('auth', sprintf(
+                $this->flash->add('success', sprintf(
                     'Welcome, %s! Last login: %s',
                     $user->name,
                     $user->lastLogin ? $user->lastLogin->format('l, j. F Y H:i') : 'never'
                 ));
                 return $response->withRedirect($this->router->urlFor('users.index'));
             } else {
-                $this->flash->add('auth', 'Invalid username or password');
+                $this->flash->add('error', 'Invalid username or password');
             }
         }
 
@@ -66,7 +66,7 @@ class AuthController extends Controller
     public function logout(Request $request, Response $response): ResponseInterface
     {
         $this->userSessionService->clear();
-        $this->flash->add('default', 'You have been logged out');
+        $this->flash->add('info', 'You have been logged out');
 
         return $response->withRedirect($this->router->urlFor('auth.login'));
     }

@@ -1,0 +1,16 @@
+{%
+    set flashMap = {
+        'error': 'danger',
+        'warning': 'warning',
+        'success': 'success',
+        'info': 'info'
+    }
+%}
+
+{% for key, class in flashMap %}
+    {% for message in flash.get(key) %}
+        <div class="alert alert-{{ class }}" role="alert">
+            {{ message }}
+        </div>
+    {% endfor %}
+{% endfor %}
