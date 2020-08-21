@@ -16,9 +16,11 @@
         <div class="container">
             <a class="navbar-brand" href="{{ url_for('home') }}">User Management</a>
             <ul class="navbar-nav ml-auto mt-2 mt-lg-0">
+                {% if user is not empty %}
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('users.logout') }}">Log out</a>
+                    <a class="nav-link" href="{{ url_for('users.logout') }}">Log out ({{ user.name }})</a>
                 </li>
+                {% endif %}
             </ul>
         </div>
     </nav>
