@@ -6,6 +6,7 @@ namespace App\Domain\User\Service;
 use App\Domain\User\Data\UserSessionData;
 use App\Domain\User\Repository\UserReadRepository;
 use App\Domain\User\Repository\UserUpdateRepository;
+use Odan\Session\SessionInterface as Session;
 
 class UserAuthService
 {
@@ -13,12 +14,16 @@ class UserAuthService
 
     private UserUpdateRepository $userUpdateRepository;
 
+    private Session $session;
+
     public function __construct(
         UserReadRepository $userReadRepository,
-        UserUpdateRepository $userUpdateRepository
+        UserUpdateRepository $userUpdateRepository,
+        Session $sessesion
     ) {
         $this->userReadRepository = $userReadRepository;
         $this->userUpdateRepository = $userUpdateRepository;
+        $this->session = $sessesion;
     }
 
     public function authenticate(string $username, string $password): ?UserSessionData
@@ -35,6 +40,28 @@ class UserAuthService
         }
 
         return UserSessionData::fromArray($row);
+    }
+
+    public function isAuthenticated(): bool
+    {
+        return (bool) $this->getUser();
+    }
+
+    public function setUser(UserSessionData $data): void
+    {
+        $this->session->set('User', $data);
+    }
+
+    public function getUser(): ?UserSessionData
+    {
+        return $this->session->get('User');
+    }
+
+    public function logout(): void
+    {
+        if ($this->session->has('User')) {
+            $this->session->remove('User');
+        }
     }
 
     public function updateLastLogin(int $userId): bool

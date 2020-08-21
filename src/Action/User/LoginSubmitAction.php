@@ -5,7 +5,6 @@ namespace App\Action\User;
 
 use App\Action\Action;
 use App\Domain\User\Service\UserAuthService;
-use App\Domain\User\Service\UserSessionService;
 use Odan\Session\FlashInterface as Flash;
 use Psr\Http\Message\ResponseInterface;
 use Slim\Interfaces\RouteParserInterface as RouteParser;
@@ -17,8 +16,6 @@ class LoginSubmitAction extends Action
 {
     private UserAuthService $userAuthService;
 
-    private UserSessionService $userSessionService;
-
     private RouteParser $router;
 
     private Twig $view;
@@ -27,13 +24,11 @@ class LoginSubmitAction extends Action
 
     public function __construct(
         UserAuthService $userAuthService,
-        UserSessionService $userSessionService,
         RouteParser $router,
         Twig $view,
         Flash $flash
     ) {
         $this->userAuthService = $userAuthService;
-        $this->userSessionService = $userSessionService;
         $this->router = $router;
         $this->view = $view;
         $this->flash = $flash;
@@ -47,7 +42,7 @@ class LoginSubmitAction extends Action
         $user = $this->userAuthService->authenticate($username, $password);
         if ($user) {
             $this->userAuthService->updateLastLogin($user->id);
-            $this->userSessionService->set($user);
+            $this->userAuthService->setUser($user);
 
             $this->flash->add('success', sprintf(
                 'Welcome, %s! Last login: %s',

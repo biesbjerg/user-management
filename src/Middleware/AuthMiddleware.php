@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace App\Middleware;
 
-use App\Domain\User\Service\UserSessionService;
+use App\Domain\User\Service\UserAuthService;
 use Odan\Session\FlashInterface as Flash;
 use Slim\Psr7\Factory\ResponseFactory;
 use Psr\Http\Message\ServerRequestInterface;
@@ -16,7 +16,7 @@ class AuthMiddleware implements MiddlewareInterface
 {
     private ResponseFactory $responseFactory;
 
-    private UserSessionService $userSessionService;
+    private UserAuthService $userAuthService;
 
     private Flash $flash;
 
@@ -24,19 +24,19 @@ class AuthMiddleware implements MiddlewareInterface
 
     public function __construct(
         ResponseFactory $responseFactory,
-        UserSessionService $userSessionService,
+        UserAuthService $userAuthService,
         Flash $flash,
         RouteParser $router
     ) {
         $this->responseFactory = $responseFactory;
-        $this->userSessionService = $userSessionService;
+        $this->userAuthService = $userAuthService;
         $this->flash = $flash;
         $this->router = $router;
     }
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
-        if ($this->userSessionService->isAuthenticated()) {
+        if ($this->userAuthService->isAuthenticated()) {
             return $handler->handle($request);
         }
 

@@ -4,8 +4,8 @@ declare(strict_types=1);
 namespace App\Action\User;
 
 use App\Action\Action;
+use App\Domain\User\Service\UserAuthService;
 use App\Domain\User\Service\UserDeleteService;
-use App\Domain\User\Service\UserSessionService;
 use Psr\Http\Message\ResponseInterface;
 use Slim\Http\Response;
 use Slim\Http\ServerRequest as Request;
@@ -16,7 +16,7 @@ class DeleteAction extends Action
 {
     private UserDeleteService $userDeleteService;
 
-    private UserSessionService $userSessionService;
+    private UserAuthService $userAuthService;
 
     private RouteParser $router;
 
@@ -24,19 +24,19 @@ class DeleteAction extends Action
 
     public function __construct(
         UserDeleteService $userDeleteService,
-        UserSessionService $userSessionService,
+        UserAuthService $userAuthService,
         RouteParser $router,
         Flash $flash
     ) {
         $this->userDeleteService = $userDeleteService;
-        $this->userSessionService = $userSessionService;
+        $this->userAuthService = $userAuthService;
         $this->router = $router;
         $this->flash = $flash;
     }
 
     public function __invoke(Request $request, Response $response, $id): ResponseInterface
     {
-        $currentUser = $this->userSessionService->get();
+        $currentUser = $this->userAuthService->getUser();
         if ($currentUser->id === (int) $id) {
             $this->flash->add('error', 'You cannot delete currently logged in user');
             return $response->withRedirect($this->router->urlFor('users.index'));
