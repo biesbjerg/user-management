@@ -14,7 +14,7 @@ class UserUpdateService
         $this->repository = $repository;
     }
 
-    public function save($id, array $data): bool
+    public function save(int $id, array $data): bool
     {
         // TODO: Remove
         unset($data['_METHOD']);

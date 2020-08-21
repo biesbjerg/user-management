@@ -14,7 +14,7 @@ class UserUpdateRepository
         $this->connection = $connection;
     }
 
-    public function update($id, array $data): bool
+    public function update(int $id, array $data): bool
     {
         return (bool) $this->connection->update('users', $data, ['id' => $id]);
     }

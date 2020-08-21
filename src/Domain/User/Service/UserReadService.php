@@ -19,7 +19,7 @@ class UserReadService
         return $this->repository->findAll();
     }
 
-    public function get($id): array
+    public function getById(int $id): array
     {
         return $this->repository->findById($id);
     }

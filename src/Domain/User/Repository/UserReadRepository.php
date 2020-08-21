@@ -32,7 +32,7 @@ class UserReadRepository
         return $rows ?: [];
     }
 
-    public function findById($id): array
+    public function findById(int $id): array
     {
         $query = $this->connection->newQuery()
             ->from('users')

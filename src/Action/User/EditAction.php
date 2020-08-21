@@ -24,7 +24,7 @@ class EditAction extends Action
 
     public function __invoke(Request $request, Response $response, $id): ResponseInterface
     {
-        $data = $this->userReadService->get($id);
+        $data = $this->userReadService->getById((int) $id);
 
         return $this->view->render($response, 'users/edit.twig', $data);
     }

@@ -14,7 +14,7 @@ class UserDeleteService
         $this->repository = $repository;
     }
 
-    public function delete($id): bool
+    public function delete(int $id): bool
     {
         return $this->repository->delete($id);
     }

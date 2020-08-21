@@ -28,7 +28,7 @@ class ViewAction extends Action
 
     public function __invoke(Request $request, Response $response, $id): ResponseInterface
     {
-        $user = $this->userReadService->get($id);
+        $user = $this->userReadService->getById((int) $id);
         if (!$user) {
             $this->flash->add('error', 'User not found');
             return $response->withRedirect($this->router->urlFor('users.index'));

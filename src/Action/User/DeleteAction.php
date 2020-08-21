@@ -42,7 +42,7 @@ class DeleteAction extends Action
             return $response->withRedirect($this->router->urlFor('users.index'));
         }
 
-        if ($this->userDeleteService->delete($id)) {
+        if ($this->userDeleteService->delete((int) $id)) {
             $this->flash->add('success', 'User deleted successfully');
         } else {
             $this->flash->add('error', 'Unable to delete user');

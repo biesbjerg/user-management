@@ -43,7 +43,7 @@ class EditSubmitAction extends Action
             unset($data['password']);
         }
 
-        if ($this->userUpdateService->save($id, $data)) {
+        if ($this->userUpdateService->save((int) $id, $data)) {
             $this->flash->add('success', 'User updated successfully');
             return $response->withRedirect($this->router->urlFor('users.index'));
         }
