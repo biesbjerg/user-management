@@ -4,24 +4,32 @@ declare(strict_types=1);
 namespace App\Domain\User\Service;
 
 use App\Domain\User\Data\UserSessionData;
-use App\Domain\User\Repository\UserAuthRepository;
+use App\Domain\User\Repository\UserReadRepository;
+use App\Domain\User\Repository\UserUpdateRepository;
 
 class UserAuthService
 {
-    private UserAuthRepository $repository;
+    private UserReadRepository $userReadRepository;
 
-    public function __construct(UserAuthRepository $repository)
-    {
-        $this->repository = $repository;
+    private UserUpdateRepository $userUpdateRepository;
+
+    public function __construct(
+        UserReadRepository $userReadRepository,
+        UserUpdateRepository $userUpdateRepository
+    ) {
+        $this->userReadRepository = $userReadRepository;
+        $this->userUpdateRepository = $userUpdateRepository;
     }
 
     public function authenticate(string $username, string $password): ?UserSessionData
     {
-        $row = $this->repository->findUserByUsername($username);
+        $row = $this->userReadRepository->findByUsername($username);
         if (!$row) {
             return null;
         }
-
+        if (!$row['is_enabled']) {
+            return null;
+        }
         if (!password_verify($password, $row['password'])) {
             return null;
         }
@@ -31,6 +39,6 @@ class UserAuthService
 
     public function updateLastLogin(int $userId): bool
     {
-        return $this->repository->touchLastLogin($userId);
+        return $this->userUpdateRepository->updateLastLogin($userId);
     }
 }

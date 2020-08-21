@@ -50,4 +50,24 @@ class UserReadRepository
 
         return $row ?: [];
     }
+
+    public function findByUsername(string $username): array
+    {
+        $query = $this->connection->newQuery()
+            ->from('users')
+            ->select([
+                'id',
+                'username',
+                'password',
+                'name',
+                'is_enabled',
+                'last_login',
+                'created'
+            ])
+            ->where(['username' => $username]);
+
+        $row = $query->execute()->fetch('assoc');
+
+        return $row ?: [];
+    }
 }
