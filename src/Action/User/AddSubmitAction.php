@@ -5,32 +5,32 @@ namespace App\Action\User;
 
 use App\Action\Action;
 use App\Domain\User\Service\UserCreateService;
+use App\Responder\Responder;
 use Psr\Http\Message\ResponseInterface;
 use Slim\Http\Response;
 use Slim\Http\ServerRequest as Request;
 use Slim\Interfaces\RouteParserInterface as RouteParser;
-use Slim\Views\Twig;
 use Odan\Session\FlashInterface as Flash;
 
 class AddSubmitAction extends Action
 {
+    private Responder $responder;
+
     private UserCreateService $userCreateService;
 
     private RouteParser $router;
 
-    private Twig $view;
-
     private Flash $flash;
 
     public function __construct(
+        Responder $responder,
         UserCreateService $userCreateService,
         RouteParser $router,
-        Twig $view,
         Flash $flash
     ) {
+        $this->responder = $responder;
         $this->userCreateService = $userCreateService;
         $this->router = $router;
-        $this->view = $view;
         $this->flash = $flash;
     }
 
@@ -40,10 +40,10 @@ class AddSubmitAction extends Action
 
         if ($this->userCreateService->save($data)) {
             $this->flash->add('success', 'User added successfully');
-            return $response->withRedirect($this->router->urlFor('users.index'));
+            return $this->responder->redirect($response, $this->router->urlFor('users.index'));
         }
         $this->flash->add('error', 'Unable to add user');
 
-        return $this->view->render($response, 'users/add.twig', $data);
+        return $this->responder->render($response, 'users/add.twig', $data);
     }
 }

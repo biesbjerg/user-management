@@ -5,32 +5,32 @@ namespace App\Action\User;
 
 use App\Action\Action;
 use App\Domain\User\Service\UserUpdateService;
+use App\Responder\Responder;
 use Psr\Http\Message\ResponseInterface;
 use Slim\Http\Response;
 use Slim\Http\ServerRequest as Request;
 use Slim\Interfaces\RouteParserInterface as RouteParser;
-use Slim\Views\Twig;
 use Odan\Session\FlashInterface as Flash;
 
 class EditSubmitAction extends Action
 {
+    private Responder $responder;
+
     private UserUpdateService $userUpdateService;
 
     private RouteParser $router;
 
-    private Twig $view;
-
     private Flash $flash;
 
     public function __construct(
+        Responder $responder,
         UserUpdateService $userUpdateService,
         RouteParser $router,
-        Twig $view,
         Flash $flash
     ) {
+        $this->responder = $responder;
         $this->userUpdateService = $userUpdateService;
         $this->router = $router;
-        $this->view = $view;
         $this->flash = $flash;
     }
 
@@ -45,10 +45,10 @@ class EditSubmitAction extends Action
 
         if ($this->userUpdateService->save((int) $id, $data)) {
             $this->flash->add('success', 'User updated successfully');
-            return $response->withRedirect($this->router->urlFor('users.index'));
+            return $this->responder->redirect($response, $this->router->urlFor('users.index'));
         }
         $this->flash->add('error', 'Unable to update user');
 
-        return $this->view->render($response, 'users/edit.twig', $data);
+        return $this->responder->render($response, 'users/edit.twig', $data);
     }
 }

@@ -5,32 +5,32 @@ namespace App\Action\User;
 
 use App\Action\Action;
 use App\Domain\User\Service\UserAuthService;
+use App\Responder\Responder;
 use Odan\Session\FlashInterface as Flash;
 use Psr\Http\Message\ResponseInterface;
 use Slim\Interfaces\RouteParserInterface as RouteParser;
 use Slim\Http\Response;
 use Slim\Http\ServerRequest as Request;
-use Slim\Views\Twig;
 
 class LoginSubmitAction extends Action
 {
+    private Responder $responder;
+
     private UserAuthService $userAuthService;
 
     private RouteParser $router;
 
-    private Twig $view;
-
     private Flash $flash;
 
     public function __construct(
+        Responder $responder,
         UserAuthService $userAuthService,
         RouteParser $router,
-        Twig $view,
         Flash $flash
     ) {
+        $this->responder = $responder;
         $this->userAuthService = $userAuthService;
         $this->router = $router;
-        $this->view = $view;
         $this->flash = $flash;
     }
 
@@ -49,11 +49,11 @@ class LoginSubmitAction extends Action
                 $user->name,
                 $user->lastLogin ? $user->lastLogin->format('l, j. F Y H:i') : 'never'
             ));
-            return $response->withRedirect($this->router->urlFor('users.index'));
+            return $this->responder->redirect($response, $this->router->urlFor('users.index'));
         } else {
             $this->flash->add('error', 'Invalid username or password');
         }
 
-        return $this->view->render($response, 'users/login.twig', compact('username'));
+        return $this->responder->render($response, 'users/login.twig', compact('username'));
     }
 }
