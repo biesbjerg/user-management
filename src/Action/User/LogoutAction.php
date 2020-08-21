@@ -7,9 +7,8 @@ use App\Action\Action;
 use App\Domain\User\Service\UserAuthService;
 use App\Responder\Responder;
 use Odan\Session\FlashInterface as Flash;
-use Psr\Http\Message\ResponseInterface;
-use Slim\Http\Response;
-use Slim\Http\ServerRequest as Request;
+use Psr\Http\Message\ServerRequestInterface as Request;
+use Psr\Http\Message\ResponseInterface as Response;
 use Slim\Interfaces\RouteParserInterface as RouteParser;
 
 class LogoutAction extends Action
@@ -34,7 +33,7 @@ class LogoutAction extends Action
         $this->flash = $flash;
     }
 
-    public function __invoke(Request $request, Response $response): ResponseInterface
+    public function __invoke(Request $request, Response $response): Response
     {
         $this->userAuthService->logout();
         $this->flash->add('info', 'You have been logged out');

@@ -6,9 +6,8 @@ namespace App\Action\User;
 use App\Action\Action;
 use App\Domain\User\Service\UserUpdateService;
 use App\Responder\Responder;
-use Psr\Http\Message\ResponseInterface;
-use Slim\Http\Response;
-use Slim\Http\ServerRequest as Request;
+use Psr\Http\Message\ServerRequestInterface as Request;
+use Psr\Http\Message\ResponseInterface as Response;
 use Slim\Interfaces\RouteParserInterface as RouteParser;
 use Odan\Session\FlashInterface as Flash;
 
@@ -34,21 +33,21 @@ class EditSubmitAction extends Action
         $this->flash = $flash;
     }
 
-    public function __invoke(Request $request, Response $response, $id): ResponseInterface
+    public function __invoke(Request $request, Response $response, $id): Response
     {
-        $data = (array) $request->getParsedBody();
+        $formData = (array) $request->getParsedBody();
 
         // Don't update password if left blank
-        if (empty($data['password'])) {
-            unset($data['password']);
+        if (empty($formData['password'])) {
+            unset($formData['password']);
         }
 
-        if ($this->userUpdateService->save((int) $id, $data)) {
+        if ($this->userUpdateService->save((int) $id, $formData)) {
             $this->flash->add('success', 'User updated successfully');
             return $this->responder->redirect($response, $this->router->urlFor('users.index'));
         }
         $this->flash->add('error', 'Unable to update user');
 
-        return $this->responder->render($response, 'users/edit.twig', $data);
+        return $this->responder->render($response, 'users/edit.twig', $formData);
     }
 }

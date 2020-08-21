@@ -6,9 +6,8 @@ namespace App\Action\User;
 use App\Action\Action;
 use App\Domain\User\Service\UserReadService;
 use App\Responder\Responder;
-use Psr\Http\Message\ResponseInterface;
-use Slim\Http\Response;
-use Slim\Http\ServerRequest as Request;
+use Psr\Http\Message\ServerRequestInterface as Request;
+use Psr\Http\Message\ResponseInterface as Response;
 
 class EditAction extends Action
 {
@@ -22,7 +21,7 @@ class EditAction extends Action
         $this->userReadService = $userReadService;
     }
 
-    public function __invoke(Request $request, Response $response, $id): ResponseInterface
+    public function __invoke(Request $request, Response $response, $id): Response
     {
         $data = $this->userReadService->getById((int) $id);
 

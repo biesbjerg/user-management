@@ -7,10 +7,9 @@ use App\Action\Action;
 use App\Domain\User\Service\UserAuthService;
 use App\Responder\Responder;
 use Odan\Session\FlashInterface as Flash;
-use Psr\Http\Message\ResponseInterface;
 use Slim\Interfaces\RouteParserInterface as RouteParser;
-use Slim\Http\Response;
-use Slim\Http\ServerRequest as Request;
+use Psr\Http\Message\ServerRequestInterface as Request;
+use Psr\Http\Message\ResponseInterface as Response;
 
 class LoginSubmitAction extends Action
 {
@@ -34,10 +33,12 @@ class LoginSubmitAction extends Action
         $this->flash = $flash;
     }
 
-    public function __invoke(Request $request, Response $response): ResponseInterface
+    public function __invoke(Request $request, Response $response): Response
     {
-        $username = $request->getParsedBodyParam('username', '');
-        $password = $request->getParsedBodyParam('password', '');
+        $formData = (array) $request->getParsedBody();
+
+        $username = $formData['username'] ?? '';
+        $password = $formData['password'] ?? '';
 
         $user = $this->userAuthService->authenticate($username, $password);
         if ($user) {

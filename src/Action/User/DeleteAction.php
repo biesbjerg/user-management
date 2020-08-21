@@ -7,9 +7,8 @@ use App\Action\Action;
 use App\Domain\User\Service\UserAuthService;
 use App\Domain\User\Service\UserDeleteService;
 use App\Responder\Responder;
-use Psr\Http\Message\ResponseInterface;
-use Slim\Http\Response;
-use Slim\Http\ServerRequest as Request;
+use Psr\Http\Message\ServerRequestInterface as Request;
+use Psr\Http\Message\ResponseInterface as Response;
 use Odan\Session\FlashInterface as Flash;
 use Slim\Interfaces\RouteParserInterface as RouteParser;
 
@@ -39,7 +38,7 @@ class DeleteAction extends Action
         $this->flash = $flash;
     }
 
-    public function __invoke(Request $request, Response $response, $id): ResponseInterface
+    public function __invoke(Request $request, Response $response, $id): Response
     {
         $currentUser = $this->userAuthService->getUser();
         if ($currentUser->id === (int) $id) {

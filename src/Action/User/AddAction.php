@@ -5,9 +5,8 @@ namespace App\Action\User;
 
 use App\Action\Action;
 use App\Responder\Responder;
-use Psr\Http\Message\ResponseInterface;
-use Slim\Http\Response;
-use Slim\Http\ServerRequest as Request;
+use Psr\Http\Message\ServerRequestInterface as Request;
+use Psr\Http\Message\ResponseInterface as Response;
 
 class AddAction extends Action
 {
@@ -18,7 +17,7 @@ class AddAction extends Action
         $this->responder = $responder;
     }
 
-    public function __invoke(Request $request, Response $response): ResponseInterface
+    public function __invoke(Request $request, Response $response): Response
     {
         return $this->responder->render($response, 'users/add.twig');
     }
