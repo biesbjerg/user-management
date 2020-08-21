@@ -3,18 +3,18 @@ declare(strict_types=1);
 
 namespace App\Domain\User\Service;
 
-use App\Domain\User\Repository\UserUpdaterRepository;
+use App\Domain\User\Repository\UserCreateRepository;
 
-class UserUpdaterService
+class UserCreateService
 {
-    private UserUpdaterRepository $repository;
+    private UserCreateRepository $repository;
 
-    public function __construct(UserUpdaterRepository $repository)
+    public function __construct(UserCreateRepository $repository)
     {
         $this->repository = $repository;
     }
 
-    public function save($id, array $data): bool
+    public function save(array $data): ?string
     {
         // TODO: Remove
         unset($data['_METHOD']);
@@ -25,6 +25,6 @@ class UserUpdaterService
 
         // TODO: Validate data
 
-        return $this->repository->update($id, $data);
+        return $this->repository->create($data);
     }
 }

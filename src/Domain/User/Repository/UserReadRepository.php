@@ -5,7 +5,7 @@ namespace App\Domain\User\Repository;
 
 use Cake\Database\Connection;
 
-class UserReaderRepository
+class UserReadRepository
 {
     private Connection $connection;
 

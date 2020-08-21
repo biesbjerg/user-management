@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace App\Action\User;
 
 use App\Action\Action;
-use App\Domain\User\Service\UserUpdaterService;
+use App\Domain\User\Service\UserUpdateService;
 use Psr\Http\Message\ResponseInterface;
 use Slim\Http\Response;
 use Slim\Http\ServerRequest as Request;
@@ -14,7 +14,7 @@ use Odan\Session\FlashInterface as Flash;
 
 class EditSubmitAction extends Action
 {
-    private UserUpdaterService $userUpdaterService;
+    private UserUpdateService $userUpdateService;
 
     private RouteParser $router;
 
@@ -23,12 +23,12 @@ class EditSubmitAction extends Action
     private Flash $flash;
 
     public function __construct(
-        UserUpdaterService $userUpdaterService,
+        UserUpdateService $userUpdateService,
         RouteParser $router,
         Twig $view,
         Flash $flash
     ) {
-        $this->userUpdaterService = $userUpdaterService;
+        $this->userUpdateService = $userUpdateService;
         $this->router = $router;
         $this->view = $view;
         $this->flash = $flash;
@@ -43,8 +43,7 @@ class EditSubmitAction extends Action
             unset($data['password']);
         }
 
-        // TODO: Exception flow
-        if ($this->userUpdaterService->save($id, $data)) {
+        if ($this->userUpdateService->save($id, $data)) {
             $this->flash->add('success', 'User updated successfully');
             return $response->withRedirect($this->router->urlFor('users.index'));
         }

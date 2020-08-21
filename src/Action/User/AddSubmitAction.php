@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace App\Action\User;
 
 use App\Action\Action;
-use App\Domain\User\Service\UserCreatorService;
+use App\Domain\User\Service\UserCreateService;
 use Psr\Http\Message\ResponseInterface;
 use Slim\Http\Response;
 use Slim\Http\ServerRequest as Request;
@@ -14,7 +14,7 @@ use Odan\Session\FlashInterface as Flash;
 
 class AddSubmitAction extends Action
 {
-    private UserCreatorService $userCreatorService;
+    private UserCreateService $userCreateService;
 
     private RouteParser $router;
 
@@ -23,12 +23,12 @@ class AddSubmitAction extends Action
     private Flash $flash;
 
     public function __construct(
-        UserCreatorService $userCreatorService,
+        UserCreateService $userCreateService,
         RouteParser $router,
         Twig $view,
         Flash $flash
     ) {
-        $this->userCreatorService = $userCreatorService;
+        $this->userCreateService = $userCreateService;
         $this->router = $router;
         $this->view = $view;
         $this->flash = $flash;
@@ -38,8 +38,7 @@ class AddSubmitAction extends Action
     {
         $data = (array) $request->getParsedBody();
 
-        // TODO: Exception flow
-        if ($this->userCreatorService->save($data)) {
+        if ($this->userCreateService->save($data)) {
             $this->flash->add('success', 'User added successfully');
             return $response->withRedirect($this->router->urlFor('users.index'));
         }

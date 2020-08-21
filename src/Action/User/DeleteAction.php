@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace App\Action\User;
 
 use App\Action\Action;
-use App\Domain\User\Service\UserDeleterService;
+use App\Domain\User\Service\UserDeleteService;
 use App\Domain\User\Service\UserSessionService;
 use Psr\Http\Message\ResponseInterface;
 use Slim\Http\Response;
@@ -14,7 +14,7 @@ use Slim\Interfaces\RouteParserInterface as RouteParser;
 
 class DeleteAction extends Action
 {
-    private UserDeleterService $userDeleterService;
+    private UserDeleteService $userDeleteService;
 
     private UserSessionService $userSessionService;
 
@@ -23,12 +23,12 @@ class DeleteAction extends Action
     private Flash $flash;
 
     public function __construct(
-        UserDeleterService $userDeleterService,
+        UserDeleteService $userDeleteService,
         UserSessionService $userSessionService,
         RouteParser $router,
         Flash $flash
     ) {
-        $this->userDeleterService = $userDeleterService;
+        $this->userDeleteService = $userDeleteService;
         $this->userSessionService = $userSessionService;
         $this->router = $router;
         $this->flash = $flash;
@@ -42,7 +42,7 @@ class DeleteAction extends Action
             return $response->withRedirect($this->router->urlFor('users.index'));
         }
 
-        if ($this->userDeleterService->delete($id)) {
+        if ($this->userDeleteService->delete($id)) {
             $this->flash->add('success', 'User deleted successfully');
         } else {
             $this->flash->add('error', 'Unable to delete user');

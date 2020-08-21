@@ -3,13 +3,13 @@ declare(strict_types=1);
 
 namespace App\Domain\User\Service;
 
-use App\Domain\User\Repository\UserDeleterRepository;
+use App\Domain\User\Repository\UserDeleteRepository;
 
-class UserDeleterService
+class UserDeleteService
 {
-    private UserDeleterRepository $repository;
+    private UserDeleteRepository $repository;
 
-    public function __construct(UserDeleterRepository $repository)
+    public function __construct(UserDeleteRepository $repository)
     {
         $this->repository = $repository;
     }

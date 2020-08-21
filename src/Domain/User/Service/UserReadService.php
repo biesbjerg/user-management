@@ -3,13 +3,13 @@ declare(strict_types=1);
 
 namespace App\Domain\User\Service;
 
-use App\Domain\User\Repository\UserReaderRepository;
+use App\Domain\User\Repository\UserReadRepository;
 
-class UserReaderService
+class UserReadService
 {
-    private UserReaderRepository $repository;
+    private UserReadRepository $repository;
 
-    public function __construct(UserReaderRepository $repository)
+    public function __construct(UserReadRepository $repository)
     {
         $this->repository = $repository;
     }
