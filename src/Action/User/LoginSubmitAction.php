@@ -55,6 +55,6 @@ class LoginSubmitAction extends Action
             $this->flash->add('error', 'Invalid username or password');
         }
 
-        return $this->responder->render($response, 'users/login.twig', compact('username'));
+        return $this->responder->render($response, 'users/login', compact('username'));
     }
 }

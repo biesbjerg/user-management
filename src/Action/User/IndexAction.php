@@ -25,6 +25,6 @@ class IndexAction extends Action
     {
         $users = $this->userReadService->getAll();
 
-        return $this->responder->render($response, 'users/index.twig', compact('users'));
+        return $this->responder->render($response, 'users/index', compact('users'));
     }
 }

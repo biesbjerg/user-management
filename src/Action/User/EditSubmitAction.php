@@ -48,6 +48,6 @@ class EditSubmitAction extends Action
         }
         $this->flash->add('error', 'Unable to update user');
 
-        return $this->responder->render($response, 'users/edit.twig', $formData);
+        return $this->responder->render($response, 'users/edit', $formData);
     }
 }

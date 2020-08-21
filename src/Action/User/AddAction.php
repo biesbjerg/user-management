@@ -19,6 +19,6 @@ class AddAction extends Action
 
     public function __invoke(Request $request, Response $response): Response
     {
-        return $this->responder->render($response, 'users/add.twig');
+        return $this->responder->render($response, 'users/add');
     }
 }

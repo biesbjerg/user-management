@@ -24,6 +24,9 @@ class Responder
 
     public function render(Response $response, string $template, array $templateVars = []): Response
     {
+        if (strpos($template, '.twig') === false) {
+            $template = $template . '.twig';
+        }
         return $this->twig->render($response, $template, $templateVars + $this->templateVars);
     }
 

@@ -19,6 +19,6 @@ class LoginAction extends Action
 
     public function __invoke(Request $request, Response $response): Response
     {
-        return $this->responder->render($response, 'users/login.twig');
+        return $this->responder->render($response, 'users/login');
     }
 }
