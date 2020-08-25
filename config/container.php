@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-use App\Domain\User\Service\UserAuthService;
+use App\Domain\User\Service\AuthService;
 use Slim\App;
 use Slim\Factory\AppFactory;
 use Slim\Middleware\ErrorMiddleware;
@@ -71,7 +71,7 @@ return [
         $options = $settings['twig']['options'];
         $twig = Twig::create($settings['twig']['paths'], $options);
         $twig->getEnvironment()->addGlobal('flash', $container->get(SessionInterface::class)->getFlash());
-        $twig->getEnvironment()->addGlobal('user', $container->get(UserAuthService::class)->getUser());
+        $twig->getEnvironment()->addGlobal('auth', $container->get(AuthService::class)->getUser());
         return $twig;
     },
 
