@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace App\Action\User;
 
-use App\Action\Action;
+use App\Action\AbstractAction as Action;
 use App\Domain\User\Service\AuthService;
 use App\Domain\User\Service\UserService;
 use App\Responder\HtmlResponder;
@@ -41,7 +41,7 @@ class DeleteAction extends Action
     public function __invoke(Request $request, Response $response, $id): Response
     {
         $currentUser = $this->authService->getUser();
-        if ($currentUser->id === (int) $id) {
+        if ((int) $currentUser->id === (int) $id) {
             $this->flash->add('error', 'You cannot delete currently logged in user');
             return $this->responder->redirect($response, $this->router->urlFor('users.index'));
         }

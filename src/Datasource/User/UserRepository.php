@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Datasource\User;
 
+use App\Datasource\RecordInterface;
 use App\Datasource\User\UserRepositoryInterface;
 use Cake\Database\Connection;
 use DateTime;
@@ -18,7 +19,7 @@ class UserRepository implements UserRepositoryInterface
         $this->connection = $connection;
     }
 
-    public function find(int $id, ?array $fields = []): array
+    public function find(int $id, ?array $fields = []): ?UserRecord
     {
         $query = $this->connection->newQuery()
             ->from($this->table)
@@ -30,11 +31,14 @@ class UserRepository implements UserRepositoryInterface
         }
 
         $row = $query->execute()->fetch('assoc');
+        if (!$row) {
+            return null;
+        }
 
-        return $row ?: [];
+        return new UserRecord($row);
     }
 
-    public function findByUsername(string $username, ?array $fields = []): array
+    public function findByUsername(string $username, ?array $fields = []): ?UserRecord
     {
         $query = $this->connection->newQuery()
             ->from($this->table)
@@ -46,8 +50,27 @@ class UserRepository implements UserRepositoryInterface
         }
 
         $row = $query->execute()->fetch('assoc');
+        if (!$row) {
+            return null;
+        }
 
-        return $row ?: [];
+        return new UserRecord($row);
+    }
+
+    public function isUsernameTaken(string $username, ?array $conditions = []): bool
+    {
+        $query = $this->connection->newQuery()
+            ->from($this->table)
+            ->select('id')
+            ->where(['username' => $username]);
+
+        if ($conditions) {
+            $query->andWhere($conditions);
+        }
+
+        $row = $query->execute()->fetch('assoc');
+
+        return (bool) $row;
     }
 
     public function findAll(?array $conditions = [], ?array $fields = null, ?string $order = null): array
@@ -65,17 +88,26 @@ class UserRepository implements UserRepositoryInterface
         }
 
         $rows = $query->execute()->fetchAll('assoc');
+        if (!$rows) {
+            return [];
+        }
 
-        return $rows ?: [];
+        return array_map(fn($row) => new UserRecord($row), $rows);
     }
 
-    public function create(array $data): int
+    public function create(RecordInterface $user): int
     {
-        return (int) $this->connection->insert($this->table, $data)->lastInsertId();
+        return (int) $this->connection->insert($this->table, $user->getData())->lastInsertId();
     }
 
-    public function update(int $id, array $data): bool
+    public function update(int $id, RecordInterface $record): bool
     {
+        // Allow update without changing password.
+        // TODO: This feels hacky, find better way
+        $data = $record->getData();
+        if ($data['password'] === '' || $data['password'] === null) {
+            unset($data['password']);
+        }
         return (bool) $this->connection->update($this->table, $data, ['id' => $id]);
     }
 

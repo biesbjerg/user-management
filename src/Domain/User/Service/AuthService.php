@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace App\Domain\User\Service;
 
-use App\Domain\User\Data\UserSessionData;
+use App\Datasource\User\UserRecord;
 use App\Datasource\User\UserRepository;
 use Odan\Session\SessionInterface as Session;
 
@@ -19,9 +19,9 @@ class AuthService
         $this->session = $session;
     }
 
-    public function authenticate(string $username, string $password): ?UserSessionData
+    public function authenticate(string $username, string $password): ?UserRecord
     {
-        $row = $this->repository->findByUsername($username, [
+        $user = $this->repository->findByUsername($username, [
             'id',
             'username',
             'password',
@@ -29,17 +29,17 @@ class AuthService
             'is_enabled',
             'last_login'
         ]);
-        if (!$row) {
+        if (!$user) {
             return null;
         }
-        if (!$row['is_enabled']) {
+        if (!$user->is_enabled) {
             return null;
         }
-        if (!password_verify($password, $row['password'])) {
+        if (!password_verify($password, $user->password)) {
             return null;
         }
 
-        return UserSessionData::fromArray($row);
+        return $user;
     }
 
     public function isAuthenticated(): bool
@@ -47,12 +47,15 @@ class AuthService
         return (bool) $this->getUser();
     }
 
-    public function setUser(UserSessionData $data): void
+    public function setUser(UserRecord $user): void
     {
-        $this->session->set('User', $data);
+        // Don't store password in session, even though it is hashed
+        unset($user->password);
+
+        $this->session->set('User', $user);
     }
 
-    public function getUser(): ?UserSessionData
+    public function getUser(): ?UserRecord
     {
         return $this->session->get('User');
     }
@@ -64,8 +67,8 @@ class AuthService
         }
     }
 
-    public function updateLastLogin(int $userId): bool
+    public function updateLastLogin(UserRecord $user): bool
     {
-        return $this->repository->updateLastLogin($userId);
+        return $this->repository->updateLastLogin((int) $user->id);
     }
 }

@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace App\Action\User;
 
-use App\Action\Action;
+use App\Action\AbstractAction as Action;
 use App\Responder\HtmlResponder;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;

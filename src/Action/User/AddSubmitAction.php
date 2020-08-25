@@ -3,9 +3,11 @@ declare(strict_types=1);
 
 namespace App\Action\User;
 
-use App\Action\Action;
+use App\Action\AbstractAction as Action;
 use App\Domain\User\Service\UserService;
+use App\Exception\ValidationException;
 use App\Responder\HtmlResponder;
+use Exception;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
 use Slim\Interfaces\RouteParserInterface as RouteParser;
@@ -35,19 +37,19 @@ class AddSubmitAction extends Action
 
     public function __invoke(Request $request, Response $response): Response
     {
-        $formData = [
-            'name' => $request->getParsedBody()['name'] ?? '',
-            'username' => $request->getParsedBody()['username'] ?? '',
-            'password' => $request->getParsedBody()['password'] ?? '',
-            'is_enabled' => $request->getParsedBody()['is_enabled'] ?? ''
-        ];
+        $formData = (array) $request->getParsedBody();
 
-
-        if ($this->service->create($formData)) {
+        try {
+            $this->service->create($formData);
             $this->flash->add('success', 'User added successfully');
+
             return $this->responder->redirect($response, $this->router->urlFor('users.index'));
+        } catch (ValidationException $e) {
+            $this->flash->add('error', $e->getMessage());
+            $this->responder->setTemplateVar('validator', $e->getValidator());
+        } catch (Exception $e) {
+            $this->flash->add('error', 'Unknown error occurred');
         }
-        $this->flash->add('error', 'Unable to add user');
 
         return $this->responder->render($response, 'users/add', $formData);
     }

@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace App\Action\User;
 
-use App\Action\Action;
+use App\Action\AbstractAction as Action;
 use App\Domain\User\Service\UserService;
 use App\Responder\HtmlResponder;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -23,8 +23,8 @@ class EditAction extends Action
 
     public function __invoke(Request $request, Response $response, $id): Response
     {
-        $data = $this->service->fetchUser((int) $id);
+        $user = $this->service->fetchUser((int) $id);
 
-        return $this->responder->render($response, 'users/edit', $data);
+        return $this->responder->render($response, 'users/edit', $user->getData());
     }
 }

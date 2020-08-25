@@ -3,9 +3,10 @@ declare(strict_types=1);
 
 namespace App\Action\User;
 
-use App\Action\Action;
+use App\Action\AbstractAction as Action;
 use App\Domain\User\Service\AuthService;
 use App\Responder\HtmlResponder;
+use DateTime;
 use Odan\Session\FlashInterface as Flash;
 use Slim\Interfaces\RouteParserInterface as RouteParser;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -42,14 +43,16 @@ class LoginSubmitAction extends Action
 
         $user = $this->authService->authenticate($username, $password);
         if ($user) {
-            $this->authService->updateLastLogin($user->id);
             $this->authService->setUser($user);
+            $this->authService->updateLastLogin($user);
 
-            $this->flash->add('success', sprintf(
-                'Welcome, %s! Last login: %s',
-                $user->name,
-                $user->lastLogin ? $user->lastLogin->format('l, j. F Y H:i') : 'never'
-            ));
+            $lastLogin = 'never';
+            if ($user->last_login) {
+                $lastLogin = (new DateTime($user->last_login))->format('l, j. F Y H:i');
+            }
+
+            $this->flash->add('success', sprintf('Welcome, %s! Last login: %s', $user->name, $lastLogin));
+
             return $this->responder->redirect($response, $this->router->urlFor('users.index'));
         } else {
             $this->flash->add('error', 'Invalid username or password');

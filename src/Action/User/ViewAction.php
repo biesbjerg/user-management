@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace App\Action\User;
 
-use App\Action\Action;
+use App\Action\AbstractAction as Action;
 use App\Domain\User\Service\UserService;
 use App\Responder\HtmlResponder;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -41,6 +41,6 @@ class ViewAction extends Action
             return $this->responder->redirect($response, $this->router->urlFor('users.index'));
         }
 
-        return $this->responder->render($response, 'users/view', compact('user'));
+        return $this->responder->render($response, 'users/view', ['user' => $user->getData()]);
     }
 }
