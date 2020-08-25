@@ -5,7 +5,7 @@ namespace App\Action\User;
 
 use App\Action\Action;
 use App\Domain\User\Service\UserService;
-use App\Responder\Responder;
+use App\Responder\HtmlResponder;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
 use Slim\Interfaces\RouteParserInterface as RouteParser;
@@ -13,7 +13,7 @@ use Odan\Session\FlashInterface as Flash;
 
 class AddSubmitAction extends Action
 {
-    private Responder $responder;
+    private HtmlResponder $responder;
 
     private UserService $service;
 
@@ -22,7 +22,7 @@ class AddSubmitAction extends Action
     private Flash $flash;
 
     public function __construct(
-        Responder $responder,
+        HtmlResponder $responder,
         UserService $service,
         RouteParser $router,
         Flash $flash

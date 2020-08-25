@@ -5,17 +5,17 @@ namespace App\Action\User;
 
 use App\Action\Action;
 use App\Domain\User\Service\UserService;
-use App\Responder\Responder;
+use App\Responder\HtmlResponder;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
 
 class EditAction extends Action
 {
-    private Responder $responder;
+    private HtmlResponder $responder;
 
     private UserService $service;
 
-    public function __construct(Responder $responder, UserService $service)
+    public function __construct(HtmlResponder $responder, UserService $service)
     {
         $this->responder = $responder;
         $this->service = $service;

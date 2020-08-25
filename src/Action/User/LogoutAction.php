@@ -5,7 +5,7 @@ namespace App\Action\User;
 
 use App\Action\Action;
 use App\Domain\User\Service\AuthService;
-use App\Responder\Responder;
+use App\Responder\HtmlResponder;
 use Odan\Session\FlashInterface as Flash;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
@@ -13,7 +13,7 @@ use Slim\Interfaces\RouteParserInterface as RouteParser;
 
 class LogoutAction extends Action
 {
-    private Responder $responder;
+    private HtmlResponder $responder;
 
     private RouteParser $router;
 
@@ -22,7 +22,7 @@ class LogoutAction extends Action
     private Flash $flash;
 
     public function __construct(
-        Responder $responder,
+        HtmlResponder $responder,
         AuthService $authService,
         RouteParser $router,
         Flash $flash
