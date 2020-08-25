@@ -57,7 +57,7 @@ class AuthService
         return $this->session->get('User');
     }
 
-    public function logout(): void
+    public function clearUser(): void
     {
         if ($this->session->has('User')) {
             $this->session->remove('User');

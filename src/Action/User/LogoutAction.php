@@ -35,7 +35,7 @@ class LogoutAction extends Action
 
     public function __invoke(Request $request, Response $response): Response
     {
-        $this->authService->logout();
+        $this->authService->clearUser();
         $this->flash->add('info', 'You have been logged out');
 
         return $this->responder->redirect($response, $this->router->urlFor('users.login'));
