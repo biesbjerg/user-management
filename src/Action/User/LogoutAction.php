@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace App\Action\User;
 
 use App\Action\Action;
-use App\Domain\User\Service\UserAuthService;
+use App\Domain\User\Service\AuthService;
 use App\Responder\Responder;
 use Odan\Session\FlashInterface as Flash;
 use Psr\Http\Message\ServerRequestInterface as Request;
@@ -17,25 +17,25 @@ class LogoutAction extends Action
 
     private RouteParser $router;
 
-    private UserAuthService $userAuthService;
+    private AuthService $authService;
 
     private Flash $flash;
 
     public function __construct(
         Responder $responder,
-        UserAuthService $userAuthService,
+        AuthService $authService,
         RouteParser $router,
         Flash $flash
     ) {
         $this->responder = $responder;
-        $this->userAuthService = $userAuthService;
+        $this->authService = $authService;
         $this->router = $router;
         $this->flash = $flash;
     }
 
     public function __invoke(Request $request, Response $response): Response
     {
-        $this->userAuthService->logout();
+        $this->authService->logout();
         $this->flash->add('info', 'You have been logged out');
 
         return $this->responder->redirect($response, $this->router->urlFor('users.login'));

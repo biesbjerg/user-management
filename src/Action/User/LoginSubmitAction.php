@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace App\Action\User;
 
 use App\Action\Action;
-use App\Domain\User\Service\UserAuthService;
+use App\Domain\User\Service\AuthService;
 use App\Responder\Responder;
 use Odan\Session\FlashInterface as Flash;
 use Slim\Interfaces\RouteParserInterface as RouteParser;
@@ -15,7 +15,7 @@ class LoginSubmitAction extends Action
 {
     private Responder $responder;
 
-    private UserAuthService $userAuthService;
+    private AuthService $authService;
 
     private RouteParser $router;
 
@@ -23,12 +23,12 @@ class LoginSubmitAction extends Action
 
     public function __construct(
         Responder $responder,
-        UserAuthService $userAuthService,
+        AuthService $authService,
         RouteParser $router,
         Flash $flash
     ) {
         $this->responder = $responder;
-        $this->userAuthService = $userAuthService;
+        $this->authService = $authService;
         $this->router = $router;
         $this->flash = $flash;
     }
@@ -40,10 +40,10 @@ class LoginSubmitAction extends Action
         $username = $formData['username'] ?? '';
         $password = $formData['password'] ?? '';
 
-        $user = $this->userAuthService->authenticate($username, $password);
+        $user = $this->authService->authenticate($username, $password);
         if ($user) {
-            $this->userAuthService->updateLastLogin($user->id);
-            $this->userAuthService->setUser($user);
+            $this->authService->updateLastLogin($user->id);
+            $this->authService->setUser($user);
 
             $this->flash->add('success', sprintf(
                 'Welcome, %s! Last login: %s',

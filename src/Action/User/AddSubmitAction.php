@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace App\Action\User;
 
 use App\Action\Action;
-use App\Domain\User\Service\UserCreateService;
+use App\Domain\User\Service\UserService;
 use App\Responder\Responder;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
@@ -15,7 +15,7 @@ class AddSubmitAction extends Action
 {
     private Responder $responder;
 
-    private UserCreateService $userCreateService;
+    private UserService $service;
 
     private RouteParser $router;
 
@@ -23,21 +23,27 @@ class AddSubmitAction extends Action
 
     public function __construct(
         Responder $responder,
-        UserCreateService $userCreateService,
+        UserService $service,
         RouteParser $router,
         Flash $flash
     ) {
         $this->responder = $responder;
-        $this->userCreateService = $userCreateService;
+        $this->service = $service;
         $this->router = $router;
         $this->flash = $flash;
     }
 
     public function __invoke(Request $request, Response $response): Response
     {
-        $formData = (array) $request->getParsedBody();
+        $formData = [
+            'name' => $request->getParsedBody()['name'] ?? '',
+            'username' => $request->getParsedBody()['username'] ?? '',
+            'password' => $request->getParsedBody()['password'] ?? '',
+            'is_enabled' => $request->getParsedBody()['is_enabled'] ?? ''
+        ];
 
-        if ($this->userCreateService->save($formData)) {
+
+        if ($this->service->create($formData)) {
             $this->flash->add('success', 'User added successfully');
             return $this->responder->redirect($response, $this->router->urlFor('users.index'));
         }
