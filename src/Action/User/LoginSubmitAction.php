@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace App\Action\User;
 
 use App\Action\AbstractAction as Action;
-use App\Domain\User\Service\AuthService;
+use App\Service\User\AuthService;
 use App\Responder\HtmlResponder;
 use DateTime;
 use Odan\Session\FlashInterface as Flash;

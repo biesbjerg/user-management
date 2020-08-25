@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Domain\User\Validation;
+namespace App\Validation\User;
 
 use App\Datasource\User\UserRecord;
 use App\Datasource\User\UserRepository;

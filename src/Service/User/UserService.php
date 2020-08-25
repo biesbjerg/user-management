@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Domain\User\Service;
+namespace App\Service\User;
 
 use App\Datasource\User\UserRecord;
 use App\Datasource\User\UserRepository;
-use App\Domain\User\Validation\UserValidator;
+use App\Validation\User\UserValidator;
 use App\Exception\ValidationException;
 
 class UserService

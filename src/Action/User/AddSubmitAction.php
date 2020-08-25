@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace App\Action\User;
 
 use App\Action\AbstractAction as Action;
-use App\Domain\User\Service\UserService;
+use App\Service\User\UserService;
 use App\Exception\ValidationException;
 use App\Responder\HtmlResponder;
 use Exception;

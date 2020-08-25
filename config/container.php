@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-use App\Domain\User\Service\AuthService;
+use App\Service\User\AuthService;
 use Slim\App;
 use Slim\Factory\AppFactory;
 use Slim\Middleware\ErrorMiddleware;

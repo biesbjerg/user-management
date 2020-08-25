@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace App\Middleware;
 
-use App\Domain\User\Service\AuthService;
+use App\Service\User\AuthService;
 use Odan\Session\FlashInterface as Flash;
 use Slim\Psr7\Factory\ResponseFactory;
 use Psr\Http\Message\ServerRequestInterface;
