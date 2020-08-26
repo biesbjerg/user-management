@@ -10,7 +10,7 @@ use Throwable;
 // TODO: Move to another location?
 final class ValidationException extends DomainException
 {
-    private $validator;
+    private ValidatorInterface $validator;
 
     public function __construct(
         string $message,
