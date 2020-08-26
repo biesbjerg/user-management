@@ -1,5 +1,10 @@
 grumphp:
-    tasks: { phpcs: null }
+    tasks:
+        phpcs:
+            standard:
+                - 'phpcs.xml'
+            ignore_patterns:
+                - db/
     fixer:
         enabled: false
         fix_by_default: false
