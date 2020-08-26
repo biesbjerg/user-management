@@ -9,7 +9,8 @@
         "slim/http": "^1.0",
         "slim/psr7": "^1.1",
         "slim/slim": "4.*",
-        "slim/twig-view": "^3.0"
+        "slim/twig-view": "^3.0",
+        "vlucas/phpdotenv": "^5.1"
     },
     "autoload": {
         "psr-4": {
