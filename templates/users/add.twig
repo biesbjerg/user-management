@@ -19,6 +19,7 @@
                         class="form-control{% if validator is defined and validator.hasError('name') %} is-invalid{% endif %}"
                         name="name"
                         value="{{ name|default('') }}"
+                        autocomplete="name"
                         autofocus>
 
                     {% if validator is defined and validator.hasError('name') %}
@@ -37,7 +38,8 @@
                         id="username"
                         class="form-control{% if validator is defined and validator.hasError('username') %} is-invalid{% endif %}"
                         name="username"
-                        value="{{ username|default('') }}">
+                        value="{{ username|default('') }}"
+                        autocomplete="username">
 
                     {% if validator is defined and validator.hasError('username') %}
                         <p class="invalid-feedback">
@@ -55,7 +57,8 @@
                         id="password"
                         class="form-control{% if validator is defined and validator.hasError('password') %} is-invalid{% endif %}"
                         name="password"
-                        value="{{ password|default('') }}">
+                        value="{{ password|default('') }}"
+                        autocomplete="new-password">
 
                     {% if validator is defined and validator.hasError('password') %}
                         <p class="invalid-feedback">
