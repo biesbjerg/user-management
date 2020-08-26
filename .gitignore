@@ -1,4 +1,6 @@
 vendor/
+tmp/*
+.env
 .idea/
 .vscode/
 .php_cs.cache

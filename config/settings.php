@@ -1,8 +1,17 @@
 <?php
 declare(strict_types=1);
 
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+$dotenv->load();
+$dotenv->required([
+    'DATABASE_HOST',
+    'DATABASE',
+    'DATABASE_USER',
+    'DATABASE_PASSWORD'
+]);
+
 return [
-    'debug' => true,
+    'debug' => filter_var(env('APP_DEBUG', false), FILTER_VALIDATE_BOOLEAN),
     'timezone' => 'Europe/Copenhagen',
     'root' => dirname(__DIR__),
     'db' => [
@@ -15,10 +24,10 @@ return [
         'timezone' => 'Europe/Copenhagen',
         'flags' => [],
         'cacheMetadata' => true,
-        'host' => 'database',
-        'database' => 'ordbogen',
-        'username' => 'ordbogen',
-        'password' => 'setter-jounce-carnauba',
+        'host' => env('DATABASE_HOST', 'localhost'),
+        'database' => env('DATABASE', 'users'),
+        'username' => env('DATABASE_USER', ''),
+        'password' => env('DATABASE_PASSWORD', ''),
     ],
     'session' => [
         'use_strict_mode' => 1,
