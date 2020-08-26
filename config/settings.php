@@ -41,7 +41,7 @@ return [
             __DIR__ . '/../templates',
         ],
         'options' => [
-            'cache_path' => __DIR__ . '/../tmp/twig',
+            'cache' => __DIR__ . '/../tmp/twig',
             'strict_variables' => true,
             'autoescape' => 'html',
         ]

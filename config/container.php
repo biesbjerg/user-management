@@ -68,7 +68,9 @@ return [
 
     Twig::class => function (ContainerInterface $container): Twig {
         $settings = $container->get('settings');
-        $options = $settings['twig']['options'];
+        $options = $settings['twig']['options'] + [
+            'debug' => $settings['debug']
+        ];
         $twig = Twig::create($settings['twig']['paths'], $options);
         $twig->getEnvironment()->addGlobal('flash', $container->get(SessionInterface::class)->getFlash());
         $twig->getEnvironment()->addGlobal('auth', $container->get(AuthService::class)->getUser());
