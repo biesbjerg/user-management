@@ -24,7 +24,9 @@ return [
     App::class => function (ContainerInterface $container): App {
         AppFactory::setContainer($container);
         $app = AppFactory::create();
-        $app->getRouteCollector()->setDefaultInvocationStrategy(new RequestResponseArgs());
+        $routeCollector = $app->getRouteCollector();
+        $routeCollector->setCacheFile(__DIR__ . '/../tmp/route.file');
+        $routeCollector->setDefaultInvocationStrategy(new RequestResponseArgs());
         return $app;
     },
 
