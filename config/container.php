@@ -19,14 +19,14 @@ use App\Middleware\EnforceHttpsMiddleware;
 
 return [
     'settings' => function (): array {
-        return require __DIR__ . '/settings.php';
+        return require CONFIG . '/settings.php';
     },
 
     App::class => function (ContainerInterface $container): App {
         AppFactory::setContainer($container);
         $app = AppFactory::create();
         $routeCollector = $app->getRouteCollector();
-        $routeCollector->setCacheFile(__DIR__ . '/../tmp/route.file');
+        $routeCollector->setCacheFile(CACHE . '/route.file');
         $routeCollector->setDefaultInvocationStrategy(new RequestResponseArgs());
         return $app;
     },

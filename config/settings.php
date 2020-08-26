@@ -14,7 +14,6 @@ return [
     'debug' => filter_var(env('APP_DEBUG', false), FILTER_VALIDATE_BOOLEAN),
     'enforce_https' => filter_var(env('ENFORCE_HTTPS', false), FILTER_VALIDATE_BOOLEAN),
     'timezone' => 'Europe/Copenhagen',
-    'root' => dirname(__DIR__),
     'db' => [
         'className' => \Cake\Database\Connection::class,
         'driver' => \Cake\Database\Driver\Mysql::class,
@@ -39,10 +38,10 @@ return [
     ],
     'twig' => [
         'paths' => [
-            __DIR__ . '/../templates',
+            ROOT . '/templates',
         ],
         'options' => [
-            'cache' => __DIR__ . '/../tmp/twig',
+            'cache' => TMP . '/twig',
             'strict_variables' => true,
             'autoescape' => 'html',
         ]
