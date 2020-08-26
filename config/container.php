@@ -60,9 +60,9 @@ return [
         return new ErrorMiddleware(
             $app->getCallableResolver(),
             $app->getResponseFactory(),
-            $settings['debug'],
-            true,
-            true
+            $displayErrorDetails = $settings['debug'],
+            $logErrors = true,
+            $logErrorDetails = true
         );
     },
 

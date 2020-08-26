@@ -20,6 +20,12 @@ if ($settings['debug']) {
 date_default_timezone_set($settings['timezone']);
 
 $containerBuilder = new ContainerBuilder();
+
+if (!$settings['debug']) {
+    $containerBuilder->enableCompilation(__DIR__ . '/../tmp/cache');
+    $containerBuilder->writeProxiesToFile(true, __DIR__ . '/tmp/proxies');
+}
+
 $containerBuilder->addDefinitions(__DIR__ . '/container.php');
 $container = $containerBuilder->build();
 $app = $container->get(App::class);

@@ -12,7 +12,7 @@ return [
         'encoding' => 'utf8mb4',
         'collation' => 'utf8mb4_unicode_ci',
         'quoteIdentifiers' => true,
-        'timezone' => 'utc',
+        'timezone' => 'Europe/Copenhagen',
         'flags' => [],
         'cacheMetadata' => true,
         'host' => 'database',
@@ -36,5 +36,5 @@ return [
             'strict_variables' => true,
             'autoescape' => 'html',
         ]
-      ]
+    ]
 ];
