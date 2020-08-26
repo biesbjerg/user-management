@@ -30,7 +30,7 @@ $containerBuilder->addDefinitions(__DIR__ . '/container.php');
 $container = $containerBuilder->build();
 $app = $container->get(App::class);
 
-(require __DIR__ . '/routes.php')($app);
-(require __DIR__ . '/middleware.php')($app);
+(require __DIR__ . '/routes.php')($app, $settings);
+(require __DIR__ . '/middleware.php')($app, $settings);
 
 return $app;

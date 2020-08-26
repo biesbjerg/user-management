@@ -15,6 +15,7 @@ use Odan\Session\SessionInterface;
 use Odan\Session\PhpSession;
 use Odan\Session\Middleware\SessionMiddleware;
 use Slim\Interfaces\RouteParserInterface;
+use App\Middleware\EnforceHttpsMiddleware;
 
 return [
     'settings' => function (): array {
@@ -54,6 +55,12 @@ return [
     FlashInterface::class => function (ContainerInterface $container): FlashInterface {
         $session = $container->get(SessionInterface::class);
         return $session->getFlash();
+    },
+
+    EnforceHttpsMiddleware::class => function (ContainerInterface $container): EnforceHttpsMiddleware {
+        return new EnforceHttpsMiddleware(
+            $container->get(App::class)->getResponseFactory()
+        );
     },
 
     ErrorMiddleware::class => function (ContainerInterface $container): ErrorMiddleware {

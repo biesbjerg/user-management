@@ -12,6 +12,7 @@ $dotenv->required([
 
 return [
     'debug' => filter_var(env('APP_DEBUG', false), FILTER_VALIDATE_BOOLEAN),
+    'enforce_https' => filter_var(env('ENFORCE_HTTPS', false), FILTER_VALIDATE_BOOLEAN),
     'timezone' => 'Europe/Copenhagen',
     'root' => dirname(__DIR__),
     'db' => [

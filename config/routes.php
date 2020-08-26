@@ -5,7 +5,7 @@ use App\Middleware\AuthMiddleware;
 use Slim\App;
 use Slim\Interfaces\RouteCollectorProxyInterface;
 
-return function (App $app) {
+return function (App $app, array $settings) {
     $app->redirect('/', '/users')->setName('home');
 
     $app->get('/login', \App\Action\User\LoginAction::class)->setName('users.login');
