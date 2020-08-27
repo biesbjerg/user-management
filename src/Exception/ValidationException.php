@@ -7,7 +7,6 @@ use App\Validation\ValidatorInterface;
 use DomainException;
 use Throwable;
 
-// TODO: Move to another location?
 final class ValidationException extends DomainException
 {
     private ValidatorInterface $validator;

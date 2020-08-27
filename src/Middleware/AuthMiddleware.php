@@ -6,10 +6,10 @@ namespace App\Middleware;
 use App\Service\User\AuthService;
 use Odan\Session\FlashInterface as Flash;
 use Slim\Psr7\Factory\ResponseFactory;
-use Psr\Http\Message\ServerRequestInterface;
-use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface as Request;
+use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Server\MiddlewareInterface;
-use Psr\Http\Server\RequestHandlerInterface;
+use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
 use Slim\Interfaces\RouteParserInterface as RouteParser;
 
 class AuthMiddleware implements MiddlewareInterface
@@ -34,17 +34,17 @@ class AuthMiddleware implements MiddlewareInterface
         $this->router = $router;
     }
 
-    public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
+    public function process(Request $request, RequestHandler $handler): Response
     {
-        if ($this->authService->isAuthenticated()) {
-            return $handler->handle($request);
+        if (!$this->authService->isAuthenticated()) {
+            $this->flash->add('error', 'Please log in to access the requested resource');
+
+            return $this->responseFactory
+                ->createResponse()
+                ->withHeader('Location', $this->router->urlFor('users.login'))
+                ->withStatus(302);
         }
 
-        $this->flash->add('error', 'Please log in to access the requested resource');
-
-        return $this->responseFactory
-            ->createResponse()
-            ->withHeader('Location', $this->router->urlFor('users.login'))
-            ->withStatus(302);
+        return $handler->handle($request);
     }
 }

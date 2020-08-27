@@ -22,7 +22,7 @@ class UserService
 
     public function fetchAllUsers(): array
     {
-        return $this->repository->findAll(null, [
+        return $this->repository->findAll([], [
             'id',
             'name',
             'username',
@@ -68,7 +68,7 @@ class UserService
         }
 
         // Hash password if present
-        if ($user->password !== '' && $user->password !== null) {
+        if ($user->password !== null && $user->password !== '') {
             $user->password = password_hash($user->password, PASSWORD_DEFAULT);
         }
 

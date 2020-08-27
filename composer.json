@@ -1,6 +1,6 @@
 {
     "name": "biesbjerg/user-management",
-    "description": "User management ",
+    "description": "User management",
     "require": {
         "php": ">=7.4",
         "cakephp/database": "^4.1",

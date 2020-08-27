@@ -18,11 +18,11 @@ class UserValidator extends Validator
 
     protected function validateCreate(UserRecord $user): void
     {
-        if (empty($user->name)) {
+        if ($user->name === null || $user->name === '') {
             $this->messages['name'] = 'Name cannot be empty';
         }
 
-        if (empty($user->username)) {
+        if ($user->username === null || $user->username === '') {
             $this->messages['username'] = 'Username cannot be empty';
         } else {
             $isTaken = $this->repository->isUsernameTaken($user->username);
@@ -31,22 +31,22 @@ class UserValidator extends Validator
             }
         }
 
-        if (empty($user->password)) {
+        if ($user->password === null || $user->password === '') {
             $this->messages['password'] = 'Password cannot be empty';
         }
     }
 
     protected function validateUpdate(UserRecord $user): void
     {
-        if (empty($user->id)) {
+        if ($user->id === null || $user->id === '') {
             $this->messages['id'] = 'ID cannot be empty';
         }
 
-        if (empty($user->name)) {
+        if ($user->name === null || $user->name === '') {
             $this->messages['name'] = 'Name cannot be empty';
         }
 
-        if (empty($user->username)) {
+        if ($user->username === null || $user->username === '') {
             $this->messages['username'] = 'Username cannot be empty';
         } else {
             $isTaken = $this->repository->isUsernameTaken($user->username, [
