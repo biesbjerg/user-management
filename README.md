@@ -1,6 +1,19 @@
 # User management
 Built with Slim Micro Framework 4 in an ADR-ish pattern (Action-Domain-Responder).
 
+#### Features:
+- Log in/Log out
+- Add/edit/delete/view user
+
+#### Notes:
+- PSR-7 HTTP message interfaces: slim/psr-7
+- PSR-11 Container interface: PHP-DI
+- PSR-2 coding style 
+- PSR-4 autoloading
+- PHP Codesniffer runs automatically before every `git commit` using GrumPHP
+- Twig for templates
+- Phinx for database migrations
+
 #### Requirements:
 - PHP 7.4+
 - MySQL 5.5+
