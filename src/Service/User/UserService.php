@@ -37,31 +37,10 @@ class UserService
     /**
      * Undocumented function
      *
-     * @return UserRecord[]
-     */
-    public function fetchAllUsers(): array
-    {
-        $rows = $this->userRepository->findAll([], [
-            'id',
-            'name',
-            'username',
-            'is_enabled',
-            'last_login'
-        ]);
-        if (!$rows) {
-            return [];
-        }
-
-        return $this->userFactory->newRecordSet($rows);
-    }
-
-    /**
-     * Undocumented function
-     *
      * @param string|int $id
      * @return UserRecord|null
      */
-    public function fetchUser($id): ?UserRecord
+    public function fetch($id): ?UserRecord
     {
         $row = $this->userRepository->find($id, [
             'id',
@@ -75,6 +54,27 @@ class UserService
         }
 
         return $this->userFactory->newRecord($row);
+    }
+
+    /**
+     * Undocumented function
+     *
+     * @return UserRecord[]
+     */
+    public function fetchAll(): array
+    {
+        $rows = $this->userRepository->findAll([], [
+            'id',
+            'name',
+            'username',
+            'is_enabled',
+            'last_login'
+        ]);
+        if (!$rows) {
+            return [];
+        }
+
+        return $this->userFactory->newRecordSet($rows);
     }
 
     /**

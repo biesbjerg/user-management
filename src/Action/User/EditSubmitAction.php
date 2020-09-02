@@ -17,7 +17,7 @@ class EditSubmitAction extends Action
 {
     private HtmlResponder $responder;
 
-    private UserService $service;
+    private UserService $userService;
 
     private RouteParser $router;
 
@@ -25,12 +25,12 @@ class EditSubmitAction extends Action
 
     public function __construct(
         HtmlResponder $responder,
-        UserService $service,
+        UserService $userService,
         RouteParser $router,
         Flash $flash
     ) {
         $this->responder = $responder;
-        $this->service = $service;
+        $this->userService = $userService;
         $this->router = $router;
         $this->flash = $flash;
     }
@@ -40,7 +40,7 @@ class EditSubmitAction extends Action
         $formData = (array) $request->getParsedBody();
 
         try {
-            $this->service->update($id, $formData);
+            $this->userService->update($id, $formData);
             $this->flash->add('success', 'User updated successfully');
 
             return $this->responder->redirect($response, $this->router->urlFor('users.index'));

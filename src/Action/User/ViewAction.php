@@ -15,7 +15,7 @@ class ViewAction extends Action
 {
     private HtmlResponder $responder;
 
-    private UserService $service;
+    private UserService $userService;
 
     private Flash $flash;
 
@@ -23,19 +23,19 @@ class ViewAction extends Action
 
     public function __construct(
         HtmlResponder $responder,
-        UserService $service,
+        UserService $userService,
         Flash $flash,
         RouteParser $router
     ) {
         $this->responder = $responder;
-        $this->service = $service;
+        $this->userService = $userService;
         $this->flash = $flash;
         $this->router = $router;
     }
 
     public function __invoke(Request $request, Response $response, string $id): Response
     {
-        $user = $this->service->fetchUser($id);
+        $user = $this->userService->fetch($id);
         if (!$user) {
             $this->flash->add('error', 'User not found');
             return $this->responder->redirect($response, $this->router->urlFor('users.index'));

@@ -11,19 +11,19 @@ use Psr\Http\Message\ResponseInterface as Response;
 
 class IndexAction extends Action
 {
-    private UserService $service;
+    private UserService $userService;
 
     private HtmlResponder $responder;
 
-    public function __construct(HtmlResponder $responder, UserService $service)
+    public function __construct(HtmlResponder $responder, UserService $userService)
     {
         $this->responder = $responder;
-        $this->service = $service;
+        $this->userService = $userService;
     }
 
     public function __invoke(Request $request, Response $response): Response
     {
-        $users = $this->service->fetchAllUsers();
+        $users = $this->userService->fetchAll();
 
         return $this->responder->render($response, 'users/index', compact('users'));
     }
