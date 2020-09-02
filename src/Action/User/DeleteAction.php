@@ -38,15 +38,15 @@ class DeleteAction extends Action
         $this->flash = $flash;
     }
 
-    public function __invoke(Request $request, Response $response, $id): Response
+    public function __invoke(Request $request, Response $response, string $id): Response
     {
         $currentUser = $this->authService->getUser();
-        if ((int) $currentUser->id === (int) $id) {
+        if ($currentUser && $currentUser->id === $id) {
             $this->flash->add('error', 'You cannot delete currently logged in user');
             return $this->responder->redirect($response, $this->router->urlFor('users.index'));
         }
 
-        if ($this->userService->delete((int) $id)) {
+        if ($this->userService->delete($id)) {
             $this->flash->add('success', 'User deleted successfully');
         } else {
             $this->flash->add('error', 'Unable to delete user');

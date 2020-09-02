@@ -44,7 +44,7 @@ class LoginSubmitAction extends Action
         $user = $this->authService->authenticate($username, $password);
         if ($user) {
             $this->authService->setUser($user);
-            $this->authService->updateLastLogin($user);
+            $this->authService->updateLastLogin((string) $user->id);
 
             $lastLogin = 'never';
             if ($user->last_login) {

@@ -7,10 +7,10 @@ use App\Datasource\AbstractRecord as Record;
 
 class UserRecord extends Record
 {
-    public $id;
-    public $name;
-    public $username;
-    public $password;
-    public $is_enabled;
-    public $last_login;
+    public ?string $id;
+    public ?string $name;
+    public ?string $username;
+    public ?string $password;
+    public ?string $is_enabled;
+    public ?string $last_login;
 }

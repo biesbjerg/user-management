@@ -5,6 +5,8 @@ grumphp:
                 - 'phpcs.xml'
             ignore_patterns:
                 - db/
+        phpstan:
+            configuration: 'phpstan.neon'
     fixer:
         enabled: false
         fix_by_default: false
