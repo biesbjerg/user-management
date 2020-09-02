@@ -18,7 +18,7 @@ abstract class AbstractValidator implements ValidatorInterface
         if (!method_exists($this, $method)) {
             throw new BadMethodCallException(sprintf('Validation method not found: %s', $method));
         }
-        $this->{$method}($record);
+        $this->{$method}($data);
 
         return !$this->hasErrors();
     }
