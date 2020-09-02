@@ -4,24 +4,35 @@ declare(strict_types=1);
 namespace App\Service\User;
 
 use App\Datasource\User\UserRecord;
+use App\Datasource\User\UserRecordFactory;
 use App\Datasource\User\UserRepository;
 use Odan\Session\SessionInterface as Session;
 
 class AuthService
 {
-    private UserRepository $repository;
+    private UserRepository $userRepository;
+
+    private UserRecordFactory $userFactory;
+
+    private PasswordService $passwordService;
 
     private Session $session;
 
-    public function __construct(UserRepository $repository, Session $session)
-    {
-        $this->repository = $repository;
+    public function __construct(
+        UserRepository $userRepository,
+        UserRecordFactory $userFactory,
+        PasswordService $passwordService,
+        Session $session
+    ) {
+        $this->userRepository = $userRepository;
+        $this->userFactory = $userFactory;
+        $this->passwordService = $passwordService;
         $this->session = $session;
     }
 
     public function authenticate(string $username, string $password): ?UserRecord
     {
-        $user = $this->repository->findByUsername($username, [
+        $row = $this->userRepository->findByUsername($username, [
             'id',
             'username',
             'password',
@@ -29,17 +40,21 @@ class AuthService
             'is_enabled',
             'last_login'
         ]);
-        if (!$user) {
+        if (!$row) {
             return null;
         }
-        if (!$user->is_enabled) {
+        if (!$row['is_enabled']) {
             return null;
         }
-        if (!password_verify($password, $user->password)) {
+        if (!$this->passwordService->isValid($password, $row['password'])) {
             return null;
         }
 
-        return $user;
+        if ($this->passwordService->needsRehash($row['password'])) {
+            $this->userRepository->updatePassword($row['id'], $this->passwordService->hash($password));
+        }
+
+        return $this->userFactory->newRecord($row);
     }
 
     public function isAuthenticated(): bool
@@ -67,8 +82,14 @@ class AuthService
         }
     }
 
-    public function updateLastLogin(UserRecord $user): bool
+    /**
+     * Undocumented function
+     *
+     * @param string|int $id
+     * @return boolean
+     */
+    public function updateLastLogin($id): bool
     {
-        return $this->repository->updateLastLogin((int) $user->id);
+        return $this->userRepository->updateLastLogin($id);
     }
 }

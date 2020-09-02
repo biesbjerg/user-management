@@ -35,12 +35,12 @@ class EditSubmitAction extends Action
         $this->flash = $flash;
     }
 
-    public function __invoke(Request $request, Response $response, $id): Response
+    public function __invoke(Request $request, Response $response, string $id): Response
     {
         $formData = (array) $request->getParsedBody();
 
         try {
-            $this->service->update((int) $id, $formData);
+            $this->service->update($id, $formData);
             $this->flash->add('success', 'User updated successfully');
 
             return $this->responder->redirect($response, $this->router->urlFor('users.index'));

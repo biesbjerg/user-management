@@ -19,11 +19,17 @@
     },
     "scripts": {
         "cs:check": "phpcs",
-        "cs:fix": "phpcbf"
+        "cs:fix": "phpcbf",
+        "phpstan": "phpstan analyze",
+        "check": [
+            "@cs:check",
+            "@phpstan"
+        ]
     },
     "require-dev": {
-        "squizlabs/php_codesniffer": "^3.5",
-        "phpro/grumphp": "^0.20.0"
+        "phpro/grumphp": "^0.20.0",
+        "phpstan/phpstan": "^0.12.40",
+        "squizlabs/php_codesniffer": "^3.5"
     },
     "config": {
         "sort-packages": true

@@ -33,9 +33,9 @@ class ViewAction extends Action
         $this->router = $router;
     }
 
-    public function __invoke(Request $request, Response $response, $id): Response
+    public function __invoke(Request $request, Response $response, string $id): Response
     {
-        $user = $this->service->fetchUser((int) $id);
+        $user = $this->service->fetchUser($id);
         if (!$user) {
             $this->flash->add('error', 'User not found');
             return $this->responder->redirect($response, $this->router->urlFor('users.index'));

@@ -7,7 +7,7 @@ use App\Datasource\RecordInterface;
 
 interface ValidatorInterface
 {
-    public function check(RecordInterface $data, string $rules = 'default'): bool;
+    public function check(RecordInterface $record, string $rules = 'default'): bool;
 
     public function hasErrors(): bool;
 

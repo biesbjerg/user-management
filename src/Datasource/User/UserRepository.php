@@ -19,7 +19,7 @@ class UserRepository implements UserRepositoryInterface
         $this->connection = $connection;
     }
 
-    public function find(int $id, ?array $fields = []): ?UserRecord
+    public function find($id, ?array $fields = []): ?array
     {
         $query = $this->connection->newQuery()
             ->from($this->table)
@@ -35,10 +35,10 @@ class UserRepository implements UserRepositoryInterface
             return null;
         }
 
-        return new UserRecord($row);
+        return $row;
     }
 
-    public function findByUsername(string $username, ?array $fields = []): ?UserRecord
+    public function findByUsername(string $username, ?array $fields = []): ?array
     {
         $query = $this->connection->newQuery()
             ->from($this->table)
@@ -54,7 +54,7 @@ class UserRepository implements UserRepositoryInterface
             return null;
         }
 
-        return new UserRecord($row);
+        return $row;
     }
 
     public function isUsernameTaken(string $username, ?array $conditions = []): bool
@@ -92,15 +92,15 @@ class UserRepository implements UserRepositoryInterface
             return [];
         }
 
-        return array_map(fn($row) => new UserRecord($row), $rows);
+        return $rows;
     }
 
-    public function create(RecordInterface $user): int
+    public function create(RecordInterface $user)
     {
-        return (int) $this->connection->insert($this->table, $user->getData())->lastInsertId();
+        return $this->connection->insert($this->table, $user->getData())->lastInsertId();
     }
 
-    public function update(int $id, RecordInterface $record): bool
+    public function update($id, RecordInterface $record): bool
     {
         // Allow update without changing password.
         // TODO: This feels hacky, find better way
@@ -111,7 +111,7 @@ class UserRepository implements UserRepositoryInterface
         return (bool) $this->connection->update($this->table, $data, ['id' => $id]);
     }
 
-    public function updateLastLogin(int $id): bool
+    public function updateLastLogin($id): bool
     {
         return (bool) $this->connection->update(
             $this->table,
@@ -121,7 +121,16 @@ class UserRepository implements UserRepositoryInterface
         );
     }
 
-    public function delete(int $id): bool
+    public function updatePassword($id, string $hash): bool
+    {
+        return (bool) $this->connection->update(
+            $this->table,
+            ['password' => $hash],
+            ['id' => $id]
+        );
+    }
+
+    public function delete($id): bool
     {
         return (bool) $this->connection->delete($this->table, ['id' => $id]);
     }
