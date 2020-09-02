@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace App\Validation;
 
-use App\Datasource\RecordInterface;
 use App\Validation\ValidatorInterface;
 use BadMethodCallException;
 
@@ -11,7 +10,7 @@ abstract class AbstractValidator implements ValidatorInterface
 {
     protected array $messages = [];
 
-    public function check(RecordInterface $record, string $validate = 'default'): bool
+    public function check(array $data, string $validate = 'default'): bool
     {
         $this->messages = [];
 
@@ -19,7 +18,7 @@ abstract class AbstractValidator implements ValidatorInterface
         if (!method_exists($this, $method)) {
             throw new BadMethodCallException(sprintf('Validation method not found: %s', $method));
         }
-        $this->{$method}($record);
+        $this->{$method}($data);
 
         return !$this->hasErrors();
     }

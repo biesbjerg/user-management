@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace App\Datasource\User;
 
-use App\Datasource\RecordInterface;
 use App\Datasource\User\UserRepositoryInterface;
 use Cake\Database\Connection;
 use DateTime;
@@ -95,19 +94,13 @@ class UserRepository implements UserRepositoryInterface
         return $rows;
     }
 
-    public function create(RecordInterface $user)
+    public function create(array $data)
     {
-        return $this->connection->insert($this->table, $user->getData())->lastInsertId();
+        return $this->connection->insert($this->table, $data)->lastInsertId();
     }
 
-    public function update($id, RecordInterface $record): bool
+    public function update($id, array $data): bool
     {
-        // Allow update without changing password.
-        // TODO: This feels hacky, find better way
-        $data = $record->getData();
-        if ($data['password'] === '' || $data['password'] === null) {
-            unset($data['password']);
-        }
         return (bool) $this->connection->update($this->table, $data, ['id' => $id]);
     }
 
