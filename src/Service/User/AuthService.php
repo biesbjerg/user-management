@@ -50,6 +50,7 @@ class AuthService
             return null;
         }
 
+        // Rehash password if necessary
         if ($this->passwordService->needsRehash($row['password'])) {
             $this->userRepository->updatePassword($row['id'], $this->passwordService->hash($password));
         }

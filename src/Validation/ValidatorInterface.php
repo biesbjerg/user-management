@@ -3,11 +3,9 @@ declare(strict_types=1);
 
 namespace App\Validation;
 
-use App\Datasource\RecordInterface;
-
 interface ValidatorInterface
 {
-    public function check(RecordInterface $record, string $rules = 'default'): bool;
+    public function check(array $data, string $rules = 'default'): bool;
 
     public function hasErrors(): bool;
 

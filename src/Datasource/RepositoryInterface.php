@@ -3,8 +3,6 @@ declare(strict_types=1);
 
 namespace App\Datasource;
 
-use App\Datasource\RecordInterface;
-
 interface RepositoryInterface
 {
     /**
@@ -29,19 +27,19 @@ interface RepositoryInterface
     /**
      * Undocumented function
      *
-     * @param RecordInterface $record
+     * @param array $data
      * @return string|int
      */
-    public function create(RecordInterface $record);
+    public function create(array $data);
 
     /**
      * Undocumented function
      *
      * @param string|int $id
-     * @param RecordInterface $record
+     * @param array $data
      * @return boolean
      */
-    public function update($id, RecordInterface $record): bool;
+    public function update($id, array $data): bool;
 
     /**
      * Undocumented function

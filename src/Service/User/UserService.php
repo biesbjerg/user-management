@@ -8,9 +8,12 @@ use App\Datasource\User\UserRecordFactory;
 use App\Datasource\User\UserRepository;
 use App\Validation\User\UserValidator;
 use App\Exception\ValidationException;
+use App\Util\FiltersDataTrait;
 
 class UserService
 {
+    use FiltersDataTrait;
+
     private UserRepository $userRepository;
 
     private UserRecordFactory $userFactory;
@@ -82,18 +85,23 @@ class UserService
      */
     public function create(array $data)
     {
-        $user = $this->userFactory->newRecord($data);
+        $filteredData = $this->filterData($data, [
+            'name',
+            'username',
+            'password',
+            'is_enabled'
+        ]);
 
-        $validates = $this->userValidator->check($user, 'create');
-        if (!$validates) {
+        $isValid = $this->userValidator->check($filteredData, 'create');
+        if (!$isValid) {
              throw new ValidationException('Unable to create user', $this->userValidator);
         }
 
-        if ($user->password !== null && $user->password !== '') {
-            $user->password = $this->passwordService->hash($user->password);
+        if (array_key_exists('password', $filteredData) && $filteredData['password'] !== '') {
+            $filteredData['password'] = $this->passwordService->hash($filteredData['password']);
         }
 
-        return $this->userRepository->create($user);
+        return $this->userRepository->create($filteredData);
     }
 
     /**
@@ -105,19 +113,29 @@ class UserService
      */
     public function update($id, array $data): bool
     {
-        $user = $this->userFactory->newRecord($data);
+        $filteredData = $this->filterData($data, [
+            'id',
+            'name',
+            'username',
+            'password',
+            'is_enabled'
+        ]);
 
-        $validates = $this->userValidator->check($user, 'update');
-        if (!$validates) {
+        $isValid = $this->userValidator->check($filteredData, 'update');
+        if (!$isValid) {
             throw new ValidationException('Unable to update user', $this->userValidator);
         }
 
-        // Hash password if present
-        if ($user->password !== null && $user->password !== '') {
-            $user->password = $this->passwordService->hash($user->password);
+        if (array_key_exists('password', $filteredData)) {
+            if ($filteredData['password'] !== '') {
+                $filteredData['password'] = $this->passwordService->hash($filteredData['password']);
+            } else {
+                // Allow update without changing password.
+                unset($filteredData['password']);
+            }
         }
 
-        return $this->userRepository->update($id, $user);
+        return $this->userRepository->update($id, $filteredData);
     }
 
     /**

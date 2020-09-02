@@ -3,54 +3,53 @@ declare(strict_types=1);
 
 namespace App\Validation\User;
 
-use App\Datasource\User\UserRecord;
 use App\Datasource\User\UserRepository;
 use App\Validation\AbstractValidator as Validator;
 
 class UserValidator extends Validator
 {
-    private UserRepository $repository;
+    private UserRepository $userRepository;
 
-    public function __construct(UserRepository $repository)
+    public function __construct(UserRepository $userRepository)
     {
-        $this->repository = $repository;
+        $this->userRepository = $userRepository;
     }
 
-    protected function validateCreate(UserRecord $user): void
+    protected function validateCreate(array $data): void
     {
-        if ($user->name === null || $user->name === '') {
+        if (!array_key_exists('name', $data) || $data['name'] === '') {
             $this->messages['name'] = 'Name cannot be empty';
         }
 
-        if ($user->username === null || $user->username === '') {
+        if (!array_key_exists('username', $data) || $data['username'] === '') {
             $this->messages['username'] = 'Username cannot be empty';
         } else {
-            $isTaken = $this->repository->isUsernameTaken($user->username);
+            $isTaken = $this->userRepository->isUsernameTaken($data['username']);
             if ($isTaken) {
                 $this->messages['username'] = 'Username is taken';
             }
         }
 
-        if ($user->password === null || $user->password === '') {
+        if (!array_key_exists('password', $data) || $data['password'] === '') {
             $this->messages['password'] = 'Password cannot be empty';
         }
     }
 
-    protected function validateUpdate(UserRecord $user): void
+    protected function validateUpdate(array $data): void
     {
-        if ($user->id === null || $user->id === '') {
+        if (!array_key_exists('id', $data) || $data['id'] === '') {
             $this->messages['id'] = 'ID cannot be empty';
         }
 
-        if ($user->name === null || $user->name === '') {
+        if (!array_key_exists('name', $data) || $data['name'] === '') {
             $this->messages['name'] = 'Name cannot be empty';
         }
 
-        if ($user->username === null || $user->username === '') {
+        if (!array_key_exists('username', $data) || $data['username'] === '') {
             $this->messages['username'] = 'Username cannot be empty';
         } else {
-            $isTaken = $this->repository->isUsernameTaken($user->username, [
-                'id IS NOT' => $user->id
+            $isTaken = $this->userRepository->isUsernameTaken($data['username'], [
+                'id IS NOT' => $data['id']
             ]);
             if ($isTaken) {
                 $this->messages['username'] = 'Username is taken';
